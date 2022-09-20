@@ -91,4 +91,39 @@ p {
   border: 2px solid #4CAF50;
   border-radius: 6px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.23);
+
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
 }
+/* Mouseover tilt for .buttondiv */
+.buttondiv:hover {
+  transform: scale(1.1);
+  transition: 0.3s ease-in-out; 
+  transform-origin: ;
+}
+
+
+/* table styles */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.5em;
+  color: white;
+  
+}
+
+th, td {
+  text-align: center;
+  padding: 8px;
+}
+
+tr:nth-child(even){background: linear-gradient(to left, #f6d365 0%, #fda085 100%);}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+
