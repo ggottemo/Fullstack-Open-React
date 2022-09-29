@@ -1,13 +1,15 @@
 // React Component
 
+import PropTypes from 'prop-types'
 import React from 'react'
 
 const Total = ({parts}) => {
-    let sum = 0
-    parts.map(part => sum += part.exercises)
+ 
     return (
-        <p>Total Number of exercises: { sum }</p>
+        <p>Total Number of exercises: { parts.map(part => part.exercises).reduce( (a, b) => a + b) }</p>
     )
 }
-
+Total.propTypes = {
+    parts: PropTypes.array.isRequired
+}
 export default Total
