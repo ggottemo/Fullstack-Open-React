@@ -149,3 +149,16 @@ li {
   font-family: "Roboto", sans-serif;
   color: black;
 }
+
+button {
+  width: 80%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin: 10px 0;
+  font-size: 1.2rem;
+  background-color: rgb(112, 112, 112);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
