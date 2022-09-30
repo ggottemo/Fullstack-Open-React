@@ -16,7 +16,7 @@ Contact.propTypes = {
 
 export const Contact_list = ({ contacts, filter }) => {
   return (
-    <div>
+    <div id="list">
       {contacts.map((contact) => {
         if (contact.name.toLowerCase().includes(filter.toLowerCase())) {
           return (

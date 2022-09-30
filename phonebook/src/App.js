@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Contact_list } from "./components/contact";
+import Filter from "./components/filter";
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456", id: 1 },
@@ -35,20 +36,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div id="filter">
-        <input
-          type="text"
-          placeholder="Filter"
-          value={filter}
-          onChange={(event) => {
-            setFilter(event.target.value);
-            event.preventDefault();
-          }}
-        />
-      </div>
+      <Filter filter={filter} setFilter={setFilter} />
       <form>
         <div>
-          name:{" "}
+          <hr></hr>
+          <label>New Contact: </label>
           <input
             value={newPerson.name}
             onChange={(event) => {
@@ -71,7 +63,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <Contact_list contacts={persons} filter={filter} />
+      <Contact_list class="test" contacts={persons} filter={filter} />
     </div>
   );
 };
