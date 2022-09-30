@@ -14,15 +14,24 @@ Contact.propTypes = {
 
 // Contacts
 
-export const Contact_list = ({ contacts }) => {
+export const Contact_list = ({ contacts, filter }) => {
   return (
     <div>
-      {contacts.map((contact) => (
-        <Contact key={contact.id} name={contact.name} number={contact.number} />
-      ))}
+      {contacts.map((contact) => {
+        if (contact.name.toLowerCase().includes(filter.toLowerCase())) {
+          return (
+            <Contact
+              key={contact.id}
+              name={contact.name}
+              number={contact.number}
+            />
+          );
+        }
+      })}
     </div>
   );
 };
 Contact_list.propTypes = {
   contacts: PropTypes.array.isRequired,
+  filter: PropTypes.string.isRequired,
 };
