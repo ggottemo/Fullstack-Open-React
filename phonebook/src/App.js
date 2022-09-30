@@ -1,18 +1,31 @@
 import { useState } from "react";
 import { Contact_list } from "./components/contact";
 const App = () => {
-  const [persons, setPersons] = useState([{ id: 1, name: "Arto Hellas" }]);
-  const [newName, setNewName] = useState("Enter Name");
+  const [persons, setPersons] = useState([
+    { id: 1, name: "Arto Hellas", number: "123-456-7890" },
+  ]);
+  const [newPerson, setNewPerson] = useState({
+    name: "Enter Name",
+    number: "Enter Number",
+  });
   const [current_id, setCurrent_id] = useState(1);
   // Handlers
   const handleAddUser = (event) => {
     event.preventDefault();
-    if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+    if (persons.find((person) => person.name === newPerson.name)) {
+      alert(`${newPerson.name} is already added to phonebook`);
+      return;
+    } else if (persons.find((person) => person.number === newPerson.number)) {
+      alert(`${newPerson.number} is already added to phonebook`);
       return;
     }
+
     setCurrent_id(current_id + 1);
-    return setPersons(persons.concat([{ name: newName, id: current_id + 1 }]));
+    return setPersons(
+      persons.concat([
+        { name: newPerson.name, number: newPerson.number, id: current_id + 1 },
+      ])
+    );
   };
   return (
     <div>
@@ -21,10 +34,17 @@ const App = () => {
         <div>
           name:{" "}
           <input
-            value={newName}
+            value={newPerson.name}
             onChange={(event) => {
               event.preventDefault();
-              return setNewName(event.target.value);
+              return setNewPerson({ ...newPerson, name: event.target.value });
+            }}
+          />
+          <input
+            value={newPerson.number}
+            onChange={(event) => {
+              event.preventDefault();
+              return setNewPerson({ ...newPerson, number: event.target.value });
             }}
           />
         </div>
