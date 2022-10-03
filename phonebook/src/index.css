@@ -55,8 +55,14 @@ label {
   width: 50px;
   height: 50px;
   border: 2px dotted black;
-
+  margin-right: 0;
   cursor: pointer;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.delete:hover {
+  background-color: white;
+  color: red;
+  border: 2px dotted red;
 }
 
 .container_horizontal {
@@ -64,4 +70,18 @@ label {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  color: maroon;
+  font: 20px bold sans-serif;
+  background-color: gainsboro;
+  border-radius: 9999px;
+  width: 100%;
+  padding: 0px 10px;
+}
+
+.success {
+  color: greenyellow;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: slategray;
+  border: 1px dotted green;
 }

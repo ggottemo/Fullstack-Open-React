@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 import contactService from "../services/contact";
-export const Contact = ({ name, number }) => {
+import SuccessMessage from "./SuccessMessage";
+export const Contact = ({ name, number, set }) => {
   return (
     <p className="container_horizontal">
       {name} {number}{" "}
@@ -11,17 +12,21 @@ export const Contact = ({ name, number }) => {
         onClick={() => {
           if (window.confirm(`Delete ${name}?`)) {
             console.log(`Deleting ${name}`);
-            contactService.remove(name).then((result) => {
-              console.log(
-                `⚙ ~ file: contact.js ~ line 18 ~ .then ~ result`,
-                result
-              );
-              return result;
-            });
+            contactService
+              .remove(name)
+              .then(() => {
+                set(`Deleted ${name}`);
+                setTimeout(() => {
+                  set(null);
+                }, 5000);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }
         }}
       >
-        delete
+        Delete
       </button>
     </p>
   );
@@ -29,13 +34,17 @@ export const Contact = ({ name, number }) => {
 Contact.propTypes = {
   name: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,
+  set: PropTypes.func,
 };
 
 // Contacts
 
 export const Contact_list = ({ contacts, filter }) => {
+  const [successMsg, setSuccessMsg] = React.useState("");
+  const msg = (message) => setSuccessMsg(message);
   return (
     <div id="list">
+      {successMsg && <SuccessMessage message={successMsg} />}
       {contacts.map((contact) => {
         if (contact.name.toLowerCase().includes(filter.toLowerCase())) {
           return (
@@ -43,6 +52,7 @@ export const Contact_list = ({ contacts, filter }) => {
               key={contact.name}
               name={contact.name}
               number={contact.number}
+              set={msg}
             />
           );
         }

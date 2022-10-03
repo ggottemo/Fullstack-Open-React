@@ -8,6 +8,7 @@ const App = () => {
     name: "",
     number: "",
   });
+  const [successMsg, setSuccessMsg] = useState("");
 
   const [filter, setFilter] = useState("");
   // Effects
@@ -16,6 +17,13 @@ const App = () => {
       setPersons(initialContacts);
     });
   });
+  const updateMessage = (message) => {
+    setSuccessMsg(message);
+    setTimeout(() => {
+      setSuccessMsg(null);
+    }, 5000);
+  };
+
   // Handlers
   const handleAddUser = (event) => {
     event.preventDefault();
@@ -25,14 +33,19 @@ const App = () => {
           `${newPerson.name} is already added to phonebook. Would you like to update the number to ${newPerson.number}?`
         )
       ) {
-        contactService.update(newPerson.name, newPerson).then((result) => {
-          // Loop through to update the number
-          setPersons(
-            persons.map((person) =>
-              person.name === newPerson.name ? result : person
-            )
-          );
-        });
+        contactService
+          .update(newPerson.name, newPerson)
+          .then((result) => {
+            // Loop through to update the number
+            setPersons(
+              persons.map((person) =>
+                person.name === newPerson.name ? result : person
+              )
+            );
+          })
+          .then(() => {
+            updateMessage(`Updated ${newPerson.name}`);
+          });
       }
       return;
     } else if (persons.find((person) => person.number === newPerson.number)) {
@@ -46,6 +59,9 @@ const App = () => {
         console.log(`⚙ ~ file: App.js ~ line 29 ~ .then ~ result`, result);
         return setPersons(persons.concat(result));
       })
+      .then(() => {
+        updateMessage(`Added ${newPerson.name}`);
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -53,6 +69,7 @@ const App = () => {
 
   return (
     <div>
+      {successMsg && <div className="success">{successMsg}</div>}
       <h2>Phonebook</h2>
       <Filter filter={filter} setFilter={setFilter} />
       <form>
@@ -72,6 +89,7 @@ const App = () => {
             placeholder="Number"
             onChange={(event) => {
               event.preventDefault();
+              console.log(setSuccessMsg);
               return setNewPerson({ ...newPerson, number: event.target.value });
             }}
           />
