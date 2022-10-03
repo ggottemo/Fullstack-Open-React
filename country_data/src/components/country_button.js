@@ -1,14 +1,13 @@
 import PropTypes from "prop-types";
 import React from "react";
-import DetailView from "./detail_view";
 
-const CountryButton = ({ country }) => {
+const CountryButton = ({ country, detailedMode, setDetailedMode }) => {
   return (
     <div>
       <button
-        onClick={() => (
-          <DetailView key={country.name.common + "2"} country={country} />
-        )}
+        onClick={() => {
+          setDetailedMode(!detailedMode);
+        }}
       >
         {country.name.official}
       </button>
@@ -18,6 +17,8 @@ const CountryButton = ({ country }) => {
 
 CountryButton.propTypes = {
   country: PropTypes.object.isRequired,
+  detailedMode: PropTypes.bool.isRequired,
+  setDetailedMode: PropTypes.func.isRequired,
 };
 
 export default CountryButton;
