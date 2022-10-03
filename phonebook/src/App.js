@@ -1,22 +1,21 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Contact_list } from "./components/contact";
 import Filter from "./components/filter";
+import contactService from "./services/contact";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newPerson, setNewPerson] = useState({
-    name: "Enter Name",
-    number: "Enter Number",
+    name: "",
+    number: "",
   });
   const [current_id, setCurrent_id] = useState(4);
   const [filter, setFilter] = useState("");
   // Effects
-  const hook = () => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+  useEffect(() => {
+    contactService.getAll().then((initialContacts) => {
+      setPersons(initialContacts);
     });
-  };
-  useEffect(hook, []);
+  }, []);
   // Handlers
   const handleAddUser = (event) => {
     event.preventDefault();
@@ -27,12 +26,17 @@ const App = () => {
       alert(`${newPerson.number} is already added to phonebook`);
       return;
     }
+
     setCurrent_id(current_id + 1);
-    return setPersons(
-      persons.concat([
-        { name: newPerson.name, number: newPerson.number, id: current_id + 1 },
-      ])
-    );
+    contactService
+      .create(newPerson)
+      .then((result) => {
+        console.log(`⚙ ~ file: App.js ~ line 29 ~ .then ~ result`, result);
+        return setPersons(persons.concat(result));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -45,6 +49,7 @@ const App = () => {
           <label>New Contact: </label>
           <input
             value={newPerson.name}
+            placeholder="Name"
             onChange={(event) => {
               event.preventDefault();
               return setNewPerson({ ...newPerson, name: event.target.value });
@@ -52,6 +57,7 @@ const App = () => {
           />
           <input
             value={newPerson.number}
+            placeholder="Number"
             onChange={(event) => {
               event.preventDefault();
               return setNewPerson({ ...newPerson, number: event.target.value });
