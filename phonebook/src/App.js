@@ -8,14 +8,14 @@ const App = () => {
     name: "",
     number: "",
   });
-  const [current_id, setCurrent_id] = useState(4);
+
   const [filter, setFilter] = useState("");
   // Effects
   useEffect(() => {
     contactService.getAll().then((initialContacts) => {
       setPersons(initialContacts);
     });
-  }, []);
+  });
   // Handlers
   const handleAddUser = (event) => {
     event.preventDefault();
@@ -27,9 +27,8 @@ const App = () => {
       return;
     }
 
-    setCurrent_id(current_id + 1);
     contactService
-      .create(newPerson)
+      .create({ id: newPerson.name, ...newPerson })
       .then((result) => {
         console.log(`⚙ ~ file: App.js ~ line 29 ~ .then ~ result`, result);
         return setPersons(persons.concat(result));
