@@ -2,6 +2,7 @@ import axios from "axios";
 import { React, useEffect, useState } from "react";
 import CountryDisplay from "./components/country_display";
 import Searchbar from "./components/searchbar";
+
 function App() {
   // State information
   // Filtered list of countries & search term

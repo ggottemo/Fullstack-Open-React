@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
+import WeatherPanel from "./WeatherPanel";
 
 const DetailView = ({ country }) => {
   console.log(
@@ -33,6 +34,7 @@ const DetailView = ({ country }) => {
             <li key={language}>{country.languages[language]}</li>
           ))}
         </ul>
+        <WeatherPanel lat={country.latlng[0]} long={country.latlng[1]} />
       </div>
     </div>
   );

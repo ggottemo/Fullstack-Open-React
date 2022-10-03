@@ -22,6 +22,13 @@ export const Contact = ({ name, number, set }) => {
               })
               .catch((error) => {
                 console.log(error);
+                if (error.response.status === 404) {
+                  console.log("404");
+                  set(`Information has already been removed from server`);
+                  setTimeout(() => {
+                    set(null);
+                  }, 5000);
+                }
               });
           }
         }}
@@ -46,6 +53,10 @@ export const Contact_list = ({ contacts, filter }) => {
     <div id="list">
       {successMsg && <SuccessMessage message={successMsg} />}
       {contacts.map((contact) => {
+        // check if contact.name is defined
+        if (!contact.name) {
+          return null;
+        }
         if (contact.name.toLowerCase().includes(filter.toLowerCase())) {
           return (
             <Contact

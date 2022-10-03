@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { Contact_list } from "./components/contact";
 import Filter from "./components/filter";
+import NewContact from "./components/NewContact";
 import contactService from "./services/contact";
 const App = () => {
+  //#region State
   const [persons, setPersons] = useState([]);
   const [newPerson, setNewPerson] = useState({
     name: "",
     number: "",
   });
   const [successMsg, setSuccessMsg] = useState("");
-
+  const [errorMsg, setErrorMsg] = useState("");
   const [filter, setFilter] = useState("");
   // Effects
   useEffect(() => {
@@ -23,8 +25,9 @@ const App = () => {
       setSuccessMsg(null);
     }, 5000);
   };
-
+  //#endregion
   // Handlers
+
   const handleAddUser = (event) => {
     event.preventDefault();
     if (persons.find((person) => person.name === newPerson.name)) {
@@ -42,9 +45,17 @@ const App = () => {
                 person.name === newPerson.name ? result : person
               )
             );
+            updateMessage(`Added ${newPerson.name}`);
           })
-          .then(() => {
-            updateMessage(`Updated ${newPerson.name}`);
+          .catch((error) => {
+            console.log(error);
+            if (error.response.status === 404) {
+              console.log("404");
+              setErrorMsg(`Information has already been removed from server`);
+              setTimeout(() => {
+                setErrorMsg(null);
+              }, 5000);
+            }
           });
       }
       return;
@@ -56,7 +67,6 @@ const App = () => {
     contactService
       .create({ id: newPerson.name, ...newPerson })
       .then((result) => {
-        console.log(`⚙ ~ file: App.js ~ line 29 ~ .then ~ result`, result);
         return setPersons(persons.concat(result));
       })
       .then(() => {
@@ -69,37 +79,18 @@ const App = () => {
 
   return (
     <div>
-      {successMsg && <div className="success">{successMsg}</div>}
+      {(successMsg && <div className="success">{successMsg}</div>) ||
+        (errorMsg && <div className="error">{errorMsg}</div>)}
       <h2>Phonebook</h2>
       <Filter filter={filter} setFilter={setFilter} />
-      <form>
-        <div>
-          <hr></hr>
-          <label>New Contact: </label>
-          <input
-            value={newPerson.name}
-            placeholder="Name"
-            onChange={(event) => {
-              event.preventDefault();
-              return setNewPerson({ ...newPerson, name: event.target.value });
-            }}
-          />
-          <input
-            value={newPerson.number}
-            placeholder="Number"
-            onChange={(event) => {
-              event.preventDefault();
-              console.log(setSuccessMsg);
-              return setNewPerson({ ...newPerson, number: event.target.value });
-            }}
-          />
-        </div>
-        <div>
-          <button type="submit" onClick={handleAddUser}>
-            add
-          </button>
-        </div>
-      </form>
+      <hr></hr>
+
+      <NewContact
+        newPerson={newPerson}
+        setNewPerson={setNewPerson}
+        handleAddUser={handleAddUser}
+        setSuccessMsg={setSuccessMsg}
+      />
       <h2>Numbers</h2>
       <Contact_list class="test" contacts={persons} filter={filter} />
     </div>
