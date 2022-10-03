@@ -20,7 +20,20 @@ const App = () => {
   const handleAddUser = (event) => {
     event.preventDefault();
     if (persons.find((person) => person.name === newPerson.name)) {
-      alert(`${newPerson.name} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newPerson.name} is already added to phonebook. Would you like to update the number to ${newPerson.number}?`
+        )
+      ) {
+        contactService.update(newPerson.name, newPerson).then((result) => {
+          // Loop through to update the number
+          setPersons(
+            persons.map((person) =>
+              person.name === newPerson.name ? result : person
+            )
+          );
+        });
+      }
       return;
     } else if (persons.find((person) => person.number === newPerson.number)) {
       alert(`${newPerson.number} is already added to phonebook`);

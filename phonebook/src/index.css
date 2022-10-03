@@ -47,3 +47,21 @@ label {
   width: 100px;
   height: 30px;
 }
+
+.delete {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border: 2px dotted black;
+
+  cursor: pointer;
+}
+
+.container_horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

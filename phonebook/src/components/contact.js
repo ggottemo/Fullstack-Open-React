@@ -3,9 +3,10 @@ import React from "react";
 import contactService from "../services/contact";
 export const Contact = ({ name, number }) => {
   return (
-    <p>
+    <p className="container_horizontal">
       {name} {number}{" "}
       <button
+        className="delete"
         type="submit"
         onClick={() => {
           if (window.confirm(`Delete ${name}?`)) {
