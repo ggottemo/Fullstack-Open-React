@@ -11,6 +11,7 @@ function App() {
     searchTerm: "",
     searchList: [],
   });
+  console.log(`🎃 ~ file: App.js ~ line 14 ~ App ~ searchList`, searchList);
 
   // Fetch the list of countries from the API
   useEffect(() => {
