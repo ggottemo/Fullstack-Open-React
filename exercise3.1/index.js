@@ -1,7 +1,10 @@
-import express, { response } from 'express';
+import express, { response } from 'express'
+import morgan from 'morgan'
 const PORT = 3001;
 const app = express();
+
 app.use(express.json());
+app.use(morgan('tiny'));
 // List of contacts
 let contacts = [
     {
