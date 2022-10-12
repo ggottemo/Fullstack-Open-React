@@ -1,7 +1,7 @@
 import express, { response } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-const PORT = process.env.port || 3001;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 // setup morgan token
