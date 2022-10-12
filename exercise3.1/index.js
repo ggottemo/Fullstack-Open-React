@@ -1,7 +1,7 @@
 import express, { response } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-const PORT = 3001;
+const PORT = process.env.port || 3001;
 const app = express();
 
 // setup morgan token
@@ -13,6 +13,7 @@ morgan.token('content', function getContent (req) {
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content',
     {
         skip: function (req, res) { return req.method === 'GET'}
