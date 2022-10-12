@@ -3,8 +3,15 @@ import morgan from 'morgan'
 const PORT = 3001;
 const app = express();
 
+// setup morgan token
+morgan.token('content', function getContent (req) {
+    return (`\n
+    name: ${req.body.name} number: ${req.body.number}
+    -------------------------------------------------`)
+})
+
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'));
 // List of contacts
 let contacts = [
     {
