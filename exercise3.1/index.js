@@ -51,19 +51,43 @@ app.get("/api/persons/:id", (request, response) => {
         response.status(404).end();
     }
 });
-/////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// DELETE /////////////////////////////////////////////////
 app.delete("/api/persons/:id", (request, response) => {
     const id = Number(request.params.id);
     contacts = contacts.filter((contact) => contact.id !== id);
     if (contacts) {
         response.statusMessage = "Contact Deleted";
-        response.status(204).end;
+        response.status(204).end();
     } else {
         response.send("Contact not found");
         response.statusMessage = "No contacts found";
-        response.status(404).end;
+        response.status(404).end();
     }
 } );
+//////////////////////////////// POST /////////////////////////////////////////////////
+app.post("/api/persons", (request, response) => {
+    const body = request.body;
+    if( !body.name || !body.number) {
+        response.statusMessage ="Invalid Contact, name or number is missing";
+        response.status(404).end();
+    }
+    else if(contacts.filter((contact) => contact.name === body.name).length > 0) {
+
+        // Send an error message
+        response.status(418).send( {
+            error: "Name already in contacts list"
+        }).end()
+    }
+    else {
+        let contact = {
+            id: Math.floor(Math.random() * 10000000 + (contacts.length > 0 ? Math.max(...contacts.map((n) => n.id)) : 0)),
+            name: body.name,
+            number: body.number
+        }
+        contacts = contacts.concat(contact);
+        response.json(contact);
+    }
+});
 
 
 
