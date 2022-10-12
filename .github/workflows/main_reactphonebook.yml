@@ -5,7 +5,7 @@ name: Build and deploy Node.js app to Azure Web App - ReactPhoneBook
 
 defaults:
   run:
-    working-directory: ./exercise3.1
+    working-directory: exercise3.1
 on:
   push:
     branches:
