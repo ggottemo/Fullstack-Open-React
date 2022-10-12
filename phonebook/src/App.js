@@ -18,7 +18,7 @@ const App = () => {
     contactService.getAll().then((initialContacts) => {
       setPersons(initialContacts);
     });
-  });
+  }, persons);
   const updateMessage = (message) => {
     setSuccessMsg(message);
     setTimeout(() => {

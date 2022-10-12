@@ -1,5 +1,6 @@
 import express, { response } from 'express'
 import morgan from 'morgan'
+import cors from 'cors'
 const PORT = 3001;
 const app = express();
 
@@ -10,8 +11,12 @@ morgan.token('content', function getContent (req) {
     -------------------------------------------------`)
 })
 
-app.use(express.json());
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'));
+app.use(express.json())
+app.use(cors())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content',
+    {
+        skip: function (req, res) { return req.method === 'GET'}
+    }));
 // List of contacts
 let contacts = [
     {
