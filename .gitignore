@@ -10,6 +10,7 @@
 
 # production
 /build
+build
 
 # misc
 .DS_Store
@@ -37,3 +38,6 @@ node_modules/
 /part7/node_modules
 /part8/node_modules
 /part9/node_modules
+
+# backend repo for part 3
+exercise_3.1_PB_backend
