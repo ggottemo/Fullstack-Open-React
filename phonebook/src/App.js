@@ -18,7 +18,7 @@ const App = () => {
     contactService.getAll().then((initialContacts) => {
       setPersons(initialContacts);
     });
-  }, persons);
+  }, [persons]);
   const updateMessage = (message) => {
     setSuccessMsg(message);
     setTimeout(() => {
@@ -29,22 +29,42 @@ const App = () => {
   // Handlers
 
   const handleAddUser = (event) => {
+    console.log("persons", persons);
+    let foundId = "";
+    let foundPerson = {};
     event.preventDefault();
-    if (persons.find((person) => person.name === newPerson.name)) {
+    if (
+      persons.find((person) => {
+        if (person.name === newPerson.name) {
+          foundPerson = { ...person, number: newPerson.number };
+          console.log(
+            `🎃 ~ file: App.js ~ line 40 ~ persons.find ~ foundPerson`,
+            foundPerson
+          );
+          foundId = person.id;
+          setNewPerson({ ...person, number: newPerson.number });
+          return true;
+        } else return false;
+      })
+    ) {
       if (
         window.confirm(
           `${newPerson.name} is already added to phonebook. Would you like to update the number to ${newPerson.number}?`
         )
       ) {
         contactService
-          .update(newPerson.name, newPerson)
+          .update(foundId, foundPerson)
           .then((result) => {
+            console.log(`🎃 ~ file: App.js ~ line 52 ~ .then ~ result`, result);
             // Loop through to update the number
-            setPersons(
-              persons.map((person) =>
-                person.name === newPerson.name ? result : person
-              )
-            );
+            contactService.getAll().then((result) => {
+              console.log(
+                `🎃 ~ file: App.js ~ line 55 ~ contactService.getAll ~ result`,
+                result
+              );
+              setPersons(result);
+            });
+
             updateMessage(`Added ${newPerson.name}`);
           })
           .catch((error) => {

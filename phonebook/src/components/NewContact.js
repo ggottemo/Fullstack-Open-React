@@ -35,7 +35,7 @@ const DropDown = ({
               type="text"
               onChange={(event) => {
                 event.preventDefault();
-                console.log(setSuccessMsg);
+
                 return setNewPerson({
                   ...newPerson,
                   number: event.target.value,

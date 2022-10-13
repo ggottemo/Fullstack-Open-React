@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import contactService from "../services/contact";
 import SuccessMessage from "./SuccessMessage";
-export const Contact = ({ name, number, set }) => {
+export const Contact = ({ id, name, number, set }) => {
   return (
     <p className="container_horizontal">
       {name} {number}{" "}
@@ -13,7 +13,7 @@ export const Contact = ({ name, number, set }) => {
           if (window.confirm(`Delete ${name}?`)) {
             console.log(`Deleting ${name}`);
             contactService
-              .remove(name)
+              .remove(id)
               .then(() => {
                 set(`Deleted ${name}`);
                 setTimeout(() => {
@@ -42,6 +42,7 @@ Contact.propTypes = {
   name: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,
   set: PropTypes.func,
+  id: PropTypes.string.isRequired,
 };
 
 // Contacts
@@ -60,10 +61,11 @@ export const Contact_list = ({ contacts, filter }) => {
         if (contact.name.toLowerCase().includes(filter.toLowerCase())) {
           return (
             <Contact
-              key={contact.name}
+              key={contact.id}
               name={contact.name}
               number={contact.number}
               set={msg}
+              id={contact.id}
             />
           );
         }
