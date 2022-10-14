@@ -6,11 +6,15 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build:ui": "rm -rf build && cd ../phonebook/ && npm run build && cp -r build ../exercise3.1"
+    "build:ui": "rm -rf build && cd ../phonebook/ && npm run build && cp -r build ../exercise3.1",
+    "lint": "eslint ."
   },
   "author": "me",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.25.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.31.10",
     "nodemon": "^2.0.20"
   },
   "type": "module",
