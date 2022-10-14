@@ -7,7 +7,7 @@ import Contact from "./models/contact.js";
 dotenv.config();
 const PORT = process.env.PORT || 3001;
 const app = express();
-
+///////////////////////// MIDDLEWARE ////////////////////////////////////////////
 const errorHandler = (error, request, response, next) => {
     console.error(error.message);
     if (error.name === "CastError") {
@@ -28,7 +28,7 @@ morgan.token("content", function getContent(req) {
     name: ${req.body.name} number: ${req.body.number}, id: ${req.body.id}
     --------------------------------------------------------`;
 });
-
+///////////////////////////// ROUTES ////////////////////////////////////////////
 app.use(express.json());
 app.use(cors());
 app.use(express.static("build"));
@@ -156,7 +156,9 @@ app.put("/api/persons/:id", (request, response, next) => {
       name: request.body.name,
       number: request.body.number,
       id: request.params.id,
-    })
+    }, { new: true,
+      runValidators: true,
+      context: 'query' })
       .then((savedContact) => {
         response.json(savedContact);
       })

@@ -68,7 +68,7 @@ const App = () => {
             updateMessage(`Added ${newPerson.name}`);
           })
           .catch((error) => {
-            console.log(error);
+            console.log(error.response.data.error);
             if (error.response.status === 404) {
               console.log("404");
               setErrorMsg(`Information has already been removed from server`);
@@ -93,7 +93,11 @@ const App = () => {
         updateMessage(`Added ${newPerson.name}`);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.data.error);
+        setErrorMsg(error.response.data.error);
+        setTimeout(() => {
+            setErrorMsg(null);
+            }, 5000)
       });
   };
 
