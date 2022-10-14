@@ -8,6 +8,20 @@ dotenv.config();
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+    if (error.name === "CastError") {
+        return response.status(400).send({ error: "malformatted id" });
+    } else if (error.name === "ValidationError") {
+        return response.status(400).json({ error: error.message });
+    }
+    next(error);
+}
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: "unknown endpoint" });
+}
+
 // setup morgan token
 morgan.token("content", function getContent(req) {
   return `\n
@@ -28,6 +42,8 @@ app.use(
     }
   )
 );
+
+
 // List of contacts
 let contacts = [
   {
@@ -56,20 +72,25 @@ app.get("/", (request, response) => {
   response.send("<h1>Homepage</h1>");
 });
 /////////////////////////////////////////////////////////////////////////////////
-app.get("/api/persons", (request, response) => {
+app.get("/api/persons", (request, response, next) => {
   Contact.find({}).then((result) => {
     contacts = result;
     response.json(result);
-  });
+  })
+      .catch((error) => next(error));
 });
 /////////////////////////////////////////////////////////////////////////////////
 app.get("/info", (request, response) => {
   const date = new Date();
-  response.send(`<p>Phonebook has info for ${contacts.length} people</p>
-    <p>${date}</p>`);
+  Contact.find({}).then((result) => {
+    response.send(
+        `<p>Phonebook has info for ${result.length} people</p>
+      <p>${date}</p>`
+    );
+  });
 });
 /////////////////////////////////////////////////////////////////////////////////
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response, next) => {
   Contact.findById(request.params.id)
     .then((result) => {
       if (result) {
@@ -80,10 +101,10 @@ app.get("/api/persons/:id", (request, response) => {
         response.status(404).end();
       }
     })
-    .catch((err) => console.error(err));
+    .catch((err) => next(err));
 });
 //////////////////////////////// DELETE /////////////////////////////////////////////////
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   Contact.findByIdAndDelete(request.params.id).then((result) => {
     if (result) {
       response.statusMessage = "Contact Deleted";
@@ -93,10 +114,11 @@ app.delete("/api/persons/:id", (request, response) => {
       response.statusMessage = "No contacts found";
       response.status(404).end();
     }
-  });
+  }).catch((err) => next(err));
+
 });
 //////////////////////////////// POST /////////////////////////////////////////////////
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
   const body = request.body;
   if (!body.name || !body.number) {
     response.statusMessage = "Invalid Contact, name or number is missing";
@@ -120,7 +142,7 @@ app.post("/api/persons", (request, response) => {
       contacts = contacts.concat(savedContact);
       console.log("contact saved");
       response.json(savedContact);
-    });
+    }).catch((err) => next(err));
   }
 });
 ///////////////////////////////// PUT /////////////////////////////////////////////////
@@ -139,11 +161,13 @@ app.put("/api/persons/:id", (request, response, next) => {
         response.json(savedContact);
       })
       .catch((err) => {
-        console.error(err);
         next(err);
       });
   }
 });
+
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
