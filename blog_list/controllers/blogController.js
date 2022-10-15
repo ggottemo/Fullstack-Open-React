@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import Blog from '../models/blogPost.js';
+import logger from "../utils/logger.js";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.post('/api/blogs', (request, response) => {
         .save()
         .then(result => {
             response.status(201).json(result)
-        })
+        }).catch(error =>  logger.error(error))
 })
 
 export default router;
