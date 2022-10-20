@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
-import { MONGO_URI } from "./config/config.js";
+import Config from "./config/config.js";
+import logger from "./utils/logger.js";
 
-export default mongoose.connect(MONGO_URI).then(() => {
-    console.log("Connected to MongoDB");
-}).catch((error) => {
-    console.error("error connecting to MongoDB", error);
-});
+export default mongoose
+  .connect(Config.MONGO_URI)
+  .then(() => {
+    logger.info("Connected to MongoDB");
+  })
+  .catch((error) => {
+    logger.error("error connecting to MongoDB", error);
+  });
