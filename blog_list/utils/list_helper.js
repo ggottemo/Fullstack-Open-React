@@ -39,5 +39,31 @@ const mostBlogs = (blogs) => {
   );
   return authorWithMostBlogs;
 };
+// return author and like count for the author with the most likes using lodash
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return {};
+  }
+  const authors = blogs.map((blog) => blog.author);
+  const authorCounts = countBy(authors);
+  const authorWithMostLikes = reduce(
+    authorCounts,
+    (result, value, key) => {
+      // get the blogs for the current author
+      const authorBlogs = blogs.filter((blog) => blog.author === key);
+      // get the total likes for the current author
+      const authorLikes = authorBlogs.reduce(
+        (sum, blog) => sum + blog.likes,
+        0
+      );
+      if (result.likes < authorLikes) {
+        return { author: key, likes: authorLikes };
+      }
+      return result;
+    },
+    { author: "none", likes: 0 }
+  );
+  return authorWithMostLikes;
+};
 
-export default { dummy, totalLikes, favoriteBlog, mostBlogs };
+export default { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
