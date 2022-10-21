@@ -10,11 +10,13 @@ MONGO;
 
 app.use(cors());
 app.use(express.json());
-app.use(morgan("tiny"));
+if (!process.env.NODE_ENV === "test") {
+  app.use(morgan("tiny"));
+}
 app.use(MIDDLEWARE.requestLogger);
 
-app.use("/api/blogs", blogRouter);
+app.use(blogRouter);
 
-app.use(MIDDLEWARE.errorHandler);
 app.use(MIDDLEWARE.unknownEndpoint);
+app.use(MIDDLEWARE.errorHandler);
 export default app;
