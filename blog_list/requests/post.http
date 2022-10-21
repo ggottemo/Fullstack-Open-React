@@ -20,4 +20,8 @@ Content-Type: application/json
 {
    "likes": 3
 }
+###
+###
+POST http://localhost:3001/api/blogs
+Content-Type
 
