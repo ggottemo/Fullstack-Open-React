@@ -60,6 +60,33 @@ describe("viewing a specific blog", () => {
   });
 });
 
+describe("like a blog", () => {
+  test("succeeds with a valid id", async () => {
+    const blogsAtStart = await blogsInDb();
+    const blogToView = blogsAtStart[0];
+
+    const resultBlog = await api
+      .put(`/api/blogs/${blogToView.id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const processedBlogToView = JSON.parse(JSON.stringify(blogToView));
+
+    expect(resultBlog.body).toEqual(processedBlogToView);
+  });
+
+  test("fails with statuscode 404 if blog does not exist", async () => {
+    const validNonexistingId = await nonExistingId();
+
+    await api.put(`/api/blogs/${validNonexistingId}`).expect(404);
+  });
+
+  test("fails with statuscode 400 id is invalid", async () => {
+    const invalidId = "5a3d5da59070081a82a3445";
+
+    await api.put(`/api/blogs/${invalidId}`).expect(400);
+  });
+});
 afterAll(async () => {
   await mongoose.connection.close();
 });

@@ -41,4 +41,24 @@ router.delete("/api/blogs/:id", async (request, response, next) => {
     await Blog.findByIdAndRemove(request.params.id);
   }
 });
+//////////////////////// PUT ////////////////////////
+// Add like to blog
+router.put("/api/blogs/:id", async (request, response, next) => {
+  const body = request.body;
+  const blog = {
+    likes: body.likes,
+  };
+  if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
+    response.status(400).send({ error: "malformatted id" });
+  } else {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+      new: true,
+    });
+    if (updatedBlog) {
+      response.json(updatedBlog);
+    } else {
+      response.status(404).end();
+    }
+  }
+});
 export default router;
