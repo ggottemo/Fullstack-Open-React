@@ -44,4 +44,4 @@ const setupDB = async () => {
   await Blog.insertMany(initialBlogs);
 };
 
-export default { initialBlogs, nonExistingId, blogsInDb, clearDb, setupDB };
+export { initialBlogs, nonExistingId, blogsInDb, clearDb, setupDB };

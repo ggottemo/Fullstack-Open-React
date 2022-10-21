@@ -16,5 +16,5 @@ app.use(MIDDLEWARE.requestLogger);
 app.use("/api/blogs", blogRouter);
 
 app.use(MIDDLEWARE.errorHandler);
-//app.use(MIDDLEWARE.unknownEndpoint);
+app.use(MIDDLEWARE.unknownEndpoint);
 export default app;

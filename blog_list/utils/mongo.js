@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Config from "./config/config.js";
-import logger from "./utils/logger.js";
+import logger from "./logger.js";
 
 export default mongoose
   .connect(Config.MONGO_URI)
