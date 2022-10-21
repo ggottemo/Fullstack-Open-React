@@ -8,3 +8,16 @@
     "url":  "www.google.com",
     "likes": 3
  }
+###
+ ### GET
+GET http://localhost:3001/api/blogs
+Content-Type: application/json
+###
+###
+DELETE http://localhost:3001/api/blogs/6352cc24298d7db8d86b36a5
+Content-Type: application/json
+
+{
+   "likes": 3
+}
+

@@ -1,17 +1,15 @@
 import mongoose from "mongoose";
 import supertest from "supertest";
 import app from "../app.js";
-import {
-  blogsInDb,
-  initialBlogs,
-  nonExistingId,
-  setupDB,
-} from "./test_helper.js";
+debugger;
+const { blogsInDb, initialBlogs, nonExistingId, setupDB } = (
+  await import("./test_helper.js")
+).default;
 
 const api = supertest(app);
 
 beforeEach(async () => {
-  setupDB();
+  await setupDB();
 });
 
 describe("when there is initially some blogs saved", () => {
@@ -52,8 +50,6 @@ describe("viewing a specific blog", () => {
   test("fails with statuscode 404 if blog does not exist", async () => {
     const validNonexistingId = await nonExistingId();
 
-    console.log(validNonexistingId);
-
     await api.get(`/api/blogs/${validNonexistingId}`).expect(404);
   });
 
@@ -64,6 +60,6 @@ describe("viewing a specific blog", () => {
   });
 });
 
-afterAll(() => {
-  mongoose.connection.close();
+afterAll(async () => {
+  await mongoose.connection.close();
 });

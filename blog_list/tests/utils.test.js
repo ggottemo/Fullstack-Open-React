@@ -128,7 +128,6 @@ const setup = () => {
   };
 };
 
-debugger;
 describe("Util Functions", () => {
   test("dummy returns one", () => {
     const blogs = [];

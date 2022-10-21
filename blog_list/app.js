@@ -1,6 +1,7 @@
 // app.js
 import cors from "cors";
 import express from "express";
+import "express-async-errors";
 import morgan from "morgan";
 import blogRouter from "./controllers/blogController.js";
 import MIDDLEWARE from "./utils/middleware/middleware.js";

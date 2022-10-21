@@ -20,7 +20,6 @@ const favoriteBlog = (blogs) => {
   }, blogs[0]);
   return favorite;
 };
-// return author and blog count for the author with the most blogs using lodash
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) {
     return {};
@@ -39,7 +38,6 @@ const mostBlogs = (blogs) => {
   );
   return authorWithMostBlogs;
 };
-// return author and like count for the author with the most likes using lodash
 const mostLikes = (blogs) => {
   if (blogs.length === 0) {
     return {};

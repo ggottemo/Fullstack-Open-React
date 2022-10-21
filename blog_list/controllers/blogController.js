@@ -1,40 +1,44 @@
 import { Router } from "express";
-
+import mongoose from "mongoose";
 import Blog from "../models/blogPost.js";
-import logger from "../utils/logger.js";
 
 const router = Router();
 
-router.get("/api/blogs", (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.status(200).json(blogs);
-  });
+router.get("/api/blogs", async (request, response) => {
+  const blogs = await Blog.find({});
+  response.json(blogs);
 });
-
-router.get("/api/blogs/:id", (request, response, next) => {
+//////////////////////// GET ////////////////////////
+router.get("/api/blogs/:id", async (request, response, next) => {
   if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
     response.status(400).send({ error: "malformatted id" });
   } else {
-    Blog.findById(request.params.id)
-      .then((blog) => {
-        if (blog) {
-          response.status(200).json(blog);
-        } else {
-          response.status(404).end();
-        }
-      })
-      .catch((error) => next(error));
+    const blog = await Blog.findById(request.params.id);
+    if (blog) {
+      response.json(blog);
+    } else {
+      response.status(404).end();
+    }
   }
 });
-router.post("/api/blogs", (request, response) => {
+//////////////////////// POST ////////////////////////
+router.post("/api/blogs", async (request, response) => {
   const blog = new Blog(request.body);
 
-  blog
-    .save()
-    .then((result) => {
-      response.status(201).json(result);
-    })
-    .catch((error) => logger.error(error));
+  if (!blog.title || !blog.url) {
+    response.status(400).end();
+  } else {
+    const savedBlog = await blog.save();
+    response.status(201).json(savedBlog);
+  }
 });
 
+//////////////////////// DELETE ////////////////////////
+router.delete("/api/blogs/:id", async (request, response, next) => {
+  if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
+    response.status(400).send({ error: "malformatted id" });
+  } else {
+    await Blog.findByIdAndRemove(request.params.id);
+  }
+});
 export default router;
