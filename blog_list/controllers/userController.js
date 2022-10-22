@@ -27,6 +27,9 @@ router.post("/api/users", async (request, response) => {
   });
 
   const savedUser = await user.save();
+  if (!savedUser) {
+    response.status(400).send({ error: "user not saved" });
+  }
   response.status(201).json(savedUser);
 });
 
