@@ -2,8 +2,9 @@ import bcrypt from "bcrypt";
 import supertest from "supertest";
 import User from "../models/user.js";
 import app from "../app.js";
-const { initialUsers, usersInDb, setupDB } = (await import("./test_helper.js"))
-  .default;
+const { initialUsers, usersInDb, setupDB, createTenSampleBlogs } = (
+  await import("./test_helper.js")
+).default;
 
 const api = supertest(app);
 
@@ -89,5 +90,30 @@ describe("create user", () => {
 
     const usernames = usersAtEnd.map((u) => u.username);
     expect(usernames).not.toContain(newUser.username);
+  });
+  test("users are returned with their blogs", async () => {
+    const newUser = {
+      username: "test",
+      name: "test",
+      password: "password",
+    };
+    await api.post("/api/users").send(newUser).expect(201);
+    await createTenSampleBlogs();
+    const usersAtStart = await usersInDb();
+
+    const response = await api.get("/api/users");
+
+    expect(response.body).toHaveLength(usersAtStart.length);
+
+    response.body.forEach((user) => {
+      expect(user).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          username: expect.any(String),
+          name: expect.any(String),
+          blogs: expect.any(Array),
+        })
+      );
+    });
   });
 });

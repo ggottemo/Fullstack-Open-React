@@ -28,6 +28,9 @@ const initialBlogs = [
 const initialUsers = [
   {
     username: "root",
+    id: "5a422a851b54a676234d17f7",
+    name: "Superuser",
+    password: "sekret",
   },
 ];
 /////////////////////// BLOGS ////////////////////////
@@ -57,10 +60,50 @@ const setupDB = async () => {
   await Blog.insertMany(initialBlogs);
   await User.insertMany(initialUsers);
 };
+const createTenSampleBlogs = async () => {
+  const blogs = [];
+  const tempUser = await User.findOne({});
+  await clearUserBlogs(tempUser);
+  for (let i = 0; i < 10; i++) {
+    const blog = new Blog({
+      title: `title${i}`,
+      author: `author${i}`,
+      url: `url${i}`,
+      likes: i,
+      user: tempUser.id,
+    });
+    blogs.push(blog);
+  }
+  await Blog.insertMany(blogs);
+  await User.findOneAndUpdate(
+    { id: tempUser.id },
+    { blogs: blogs.map((blog) => blog.id) }
+  );
+};
 /////////////////////// USERS ////////////////////////
 const usersInDb = async () => {
   const users = await User.find({});
   return Promise.all(users.map((user) => user.toJSON()));
+};
+// Get user
+const getUser = async () => {
+  const user = await User.findOne({});
+  return user;
+};
+
+const clearUserBlogs = async (user) => {
+  await Blog.deleteMany({ user: user.id });
+  await User.findOneAndUpdate({ id: user.id }, { blogs: [] });
+};
+
+const insertAndReturnUser = async () => {
+  const user = new User({
+    username: "testuser",
+    name: "testuser",
+    password: "testuser",
+  });
+  await user.save();
+  return user;
 };
 
 export default {
@@ -71,4 +114,6 @@ export default {
   setupDB,
   usersInDb,
   initialUsers,
+  getUser,
+  createTenSampleBlogs,
 };

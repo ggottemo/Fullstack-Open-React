@@ -1,6 +1,7 @@
 import { Router } from "express";
 import mongoose from "mongoose";
 import Blog from "../models/blogPost.js";
+import User from "../models/user.js";
 
 const router = Router();
 
@@ -28,8 +29,21 @@ router.post("/api/blogs", async (request, response) => {
   if (!blog.title || !blog.url) {
     response.status(400).end();
   } else {
-    const savedBlog = await blog.save();
-    response.status(201).json(savedBlog);
+    if (blog.user) {
+      await User.findOne({}).exec(async (err, user) => {
+        if (err) {
+          throw err;
+        }
+        blog.user = user._id;
+        const savedBlog = await blog.save();
+        user.blogs = user.blogs.concat(savedBlog._id);
+        await user.save();
+        response.status(201).json(savedBlog);
+      });
+    } else {
+      await blog.save();
+      response.status(201).json(blog);
+    }
   }
 });
 

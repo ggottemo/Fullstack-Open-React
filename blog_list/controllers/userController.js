@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 const router = Router();
 
 router.get("/api/users", async (request, response) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate("blogs");
   response.json(users);
 });
 
