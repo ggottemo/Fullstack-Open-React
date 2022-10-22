@@ -22,7 +22,8 @@
     "lodash-es": "^4.17.21",
     "mongoose": "^6.6.5",
     "morgan": "^1.10.0",
-    "nstall": "^0.2.0"
+    "nstall": "^0.2.0",
+    "superagent": "^8.0.0"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.1.1",

@@ -4,6 +4,7 @@ import express from "express";
 import "express-async-errors";
 import morgan from "morgan";
 import blogRouter from "./controllers/blogController.js";
+import userRouter from "./controllers/userController.js";
 import MIDDLEWARE from "./utils/middleware/middleware.js";
 import MONGO from "./utils/mongo.js";
 const app = express();
@@ -17,7 +18,7 @@ if (!process.env.NODE_ENV === "test") {
 app.use(MIDDLEWARE.requestLogger);
 
 app.use(blogRouter);
-
+app.use(userRouter);
 app.use(MIDDLEWARE.unknownEndpoint);
 app.use(MIDDLEWARE.errorHandler);
 export default app;

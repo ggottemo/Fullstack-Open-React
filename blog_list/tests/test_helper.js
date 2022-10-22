@@ -1,5 +1,6 @@
 import Blog from "../models/blogPost.js";
 import MONGO from "../utils/mongo.js";
+import User from "../models/user.js";
 MONGO;
 const initialBlogs = [
   {
@@ -24,9 +25,15 @@ const initialBlogs = [
     likes: 12,
   },
 ];
-
+const initialUsers = [
+  {
+    username: "root",
+  },
+];
+/////////////////////// BLOGS ////////////////////////
 const clearDb = async () => {
   await Blog.deleteMany({});
+  await User.deleteMany({});
 };
 
 const nonExistingId = async () => {
@@ -48,6 +55,20 @@ const blogsInDb = async () => {
 const setupDB = async () => {
   await clearDb();
   await Blog.insertMany(initialBlogs);
+  await User.insertMany(initialUsers);
+};
+/////////////////////// USERS ////////////////////////
+const usersInDb = async () => {
+  const users = await User.find({});
+  return Promise.all(users.map((user) => user.toJSON()));
 };
 
-export default { initialBlogs, nonExistingId, blogsInDb, clearDb, setupDB };
+export default {
+  initialBlogs,
+  nonExistingId,
+  blogsInDb,
+  clearDb,
+  setupDB,
+  usersInDb,
+  initialUsers,
+};

@@ -1,5 +1,6 @@
 import { Router } from "express";
-
+import User from "../models/user.js";
+import bcrypt from "bcrypt";
 const router = Router();
 
 router.get("/api/users", async (request, response) => {
@@ -8,14 +9,25 @@ router.get("/api/users", async (request, response) => {
 });
 
 router.post("/api/users", async (request, response) => {
-  const body = request.body;
+  const { username, name, password } = request.body;
+  if (!username || !password) {
+    response.status(400).send({ error: "username or password missing" });
+  }
+  if (username.length < 3 || password.length < 3) {
+    response.status(400).send({ error: "username or password too short" });
+  }
+
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+
   const user = new User({
-    username: body.username,
-    name: body.name,
-    passwordHash: body.passwordHash,
+    username,
+    name,
+    passwordHash,
   });
+
   const savedUser = await user.save();
-  response.json(savedUser);
+  response.status(201).json(savedUser);
 });
 
-// TODO: Add routes here
+export default router;
