@@ -32,6 +32,9 @@ router.post("/api/blogs", async (request, response, next) => {
     return response.status(401).json({ error: "token missing or invalid" });
   }
   const user = await User.findById(decodedToken.id);
+  if (!user) {
+    return response.status(401).json({ error: "user not found" });
+  }
   if (!title || !url) {
     response.status(400).send({ error: "title or url missing" });
   }
@@ -40,7 +43,7 @@ router.post("/api/blogs", async (request, response, next) => {
     author,
     url,
     likes: likes || 0,
-    user: user._id,
+    user: user,
   });
   const savedBlog = await blog.save();
   user.blogs = user.blogs.concat(savedBlog._id);
@@ -50,10 +53,21 @@ router.post("/api/blogs", async (request, response, next) => {
 
 //////////////////////// DELETE ////////////////////////
 router.delete("/api/blogs/:id", async (request, response, next) => {
-  if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
-    response.status(400).send({ error: "malformatted id" });
-  } else {
+  const decodedToken = jwt.verify(request.token, SECRET);
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+  // Check user is the creator of the blog
+  if (request.user.id !== decodedToken.id) {
+    return response.status(401).json({ error: "unauthorized" });
+  }
+
+  const blog = await Blog.findById(request.params.id);
+  if (blog === decodedToken.id.toString()) {
     await Blog.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } else {
+    response.status(401).json({ error: "unauthorized" });
   }
 });
 //////////////////////// PUT ////////////////////////
