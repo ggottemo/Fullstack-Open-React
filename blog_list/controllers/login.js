@@ -9,22 +9,28 @@ const router = Router();
 // POST /api/login
 router.post("/api/login", async (request, response) => {
   const { username, password } = request.body;
-  const user = await User.findOne({ username });
-  const passwordCorrect =
-    user === null ? false : await bcrypt.compare(password, user.passwordHash);
-  if (!(user && passwordCorrect)) {
-    return response.status(401).json({
-      error: "invalid username or password",
-    });
-  }
-  const userForToken = {
-    username: user.username,
-    id: user.id,
-  };
-  const token = jwt.sign(userForToken, SECRET, { expiresIn: 60 * 60 * 24 * 7 });
-  response
-    .status(200)
-    .send({ token, username: user.username, name: user.name });
+  await User.findOne({ username }).exec((err, user) => {
+    if (err) throw err;
+    if (!user) {
+      response.status(401).send({ error: "invalid username" });
+    } else {
+      bcrypt.compare(password, user.passwordHash, (err, result) => {
+        if (err) throw err;
+        if (result) {
+          const userForToken = {
+            username: user.username,
+            id: user._id,
+          };
+          const token = jwt.sign(userForToken, SECRET, { expiresIn: 60 * 60 });
+          response
+            .status(200)
+            .send({ token, username: user.username, name: user.name });
+        } else {
+          response.status(401).send({ error: "invalid password" });
+        }
+      });
+    }
+  });
 });
 
 export default router;

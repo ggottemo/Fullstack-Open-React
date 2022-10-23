@@ -1,4 +1,7 @@
 import Logger from "../logger.js";
+import jwt from "jsonwebtoken";
+import { SECRET } from "../config/config.js";
+import User from "../../models/user.js";
 
 const requestLogger = (request, response, next) => {
   Logger.info("Method:", request.method);
@@ -35,10 +38,24 @@ const tokenExtractor = (request, response, next) => {
   }
   next();
 };
-
+// user extractor middleware
+const userExtractor = async (request, response, next) => {
+  const decodedToken = jwt.verify(request.token, SECRET);
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+  await User.findById(decodedToken.id).exec((err, user) => {
+    if (err) {
+      throw new Error("User not found");
+    }
+    request.user = user;
+    next();
+  });
+};
 export default {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
+  userExtractor,
 };
