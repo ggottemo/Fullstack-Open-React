@@ -16,6 +16,7 @@ app.use(express.json());
 if (!process.env.NODE_ENV === "test") {
   app.use(morgan("tiny"));
 }
+app.use(MIDDLEWARE.tokenExtractor);
 app.use(MIDDLEWARE.requestLogger);
 // Routers
 app.use(blogRouter);

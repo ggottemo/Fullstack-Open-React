@@ -2,6 +2,8 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import Blog from "../models/blogPost.js";
 import User from "../models/user.js";
+import jwt from "jsonwebtoken";
+import { SECRET } from "../utils/config/config.js";
 
 const router = Router();
 
@@ -23,28 +25,27 @@ router.get("/api/blogs/:id", async (request, response, next) => {
   }
 });
 //////////////////////// POST ////////////////////////
-router.post("/api/blogs", async (request, response) => {
-  const blog = new Blog(request.body);
-
-  if (!blog.title || !blog.url) {
-    response.status(400).end();
-  } else {
-    if (blog.user) {
-      await User.findOne({}).exec(async (err, user) => {
-        if (err) {
-          throw err;
-        }
-        blog.user = user.id;
-        const savedBlog = await blog.save();
-        user.blogs = user.blogs.concat([blog.id]);
-        await user.save();
-        response.status(201).json(savedBlog);
-      });
-    } else {
-      await blog.save();
-      response.status(201).json(blog);
-    }
+router.post("/api/blogs", async (request, response, next) => {
+  const { title, author, url, likes } = request.body;
+  const decodedToken = jwt.verify(request.token, SECRET);
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
   }
+  const user = await User.findById(decodedToken.id);
+  if (!title || !url) {
+    response.status(400).send({ error: "title or url missing" });
+  }
+  const blog = new Blog({
+    title,
+    author,
+    url,
+    likes: likes || 0,
+    user: user._id,
+  });
+  const savedBlog = await blog.save();
+  user.blogs = user.blogs.concat(savedBlog._id);
+  await user.save();
+  response.status(201).json(savedBlog);
 });
 
 //////////////////////// DELETE ////////////////////////

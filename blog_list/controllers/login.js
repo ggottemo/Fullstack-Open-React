@@ -21,7 +21,7 @@ router.post("/api/login", async (request, response) => {
     username: user.username,
     id: user.id,
   };
-  const token = jwt.sign(userForToken, SECRET);
+  const token = jwt.sign(userForToken, SECRET, { expiresIn: 60 * 60 * 24 * 7 });
   response
     .status(200)
     .send({ token, username: user.username, name: user.name });
