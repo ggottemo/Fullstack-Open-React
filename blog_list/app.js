@@ -5,6 +5,7 @@ import "express-async-errors";
 import morgan from "morgan";
 import blogRouter from "./controllers/blogController.js";
 import userRouter from "./controllers/userController.js";
+import loginRouter from "./controllers/login.js";
 import MIDDLEWARE from "./utils/middleware/middleware.js";
 import MONGO from "./utils/mongo.js";
 const app = express();
@@ -16,9 +17,10 @@ if (!process.env.NODE_ENV === "test") {
   app.use(morgan("tiny"));
 }
 app.use(MIDDLEWARE.requestLogger);
-
+// Routers
 app.use(blogRouter);
 app.use(userRouter);
+app.use(loginRouter);
 app.use(MIDDLEWARE.unknownEndpoint);
 app.use(MIDDLEWARE.errorHandler);
 export default app;

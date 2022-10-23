@@ -34,9 +34,9 @@ router.post("/api/blogs", async (request, response) => {
         if (err) {
           throw err;
         }
-        blog.user = user._id;
+        blog.user = user.id;
         const savedBlog = await blog.save();
-        user.blogs = user.blogs.concat(savedBlog._id);
+        user.blogs = user.blogs.concat([blog.id]);
         await user.save();
         response.status(201).json(savedBlog);
       });

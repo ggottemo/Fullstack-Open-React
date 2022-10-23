@@ -7,4 +7,6 @@ const MONGO_URI =
     ? process.env.TEST_MONGO_URI
     : process.env.MONGO_URI;
 
-export default { PORT, MONGO_URI };
+export const SECRET = process.env.SECRET;
+
+export default { PORT, MONGO_URI, SECRET };
