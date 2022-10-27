@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const CreateBlogForm = ({ updateNotification }) => {
+const CreateBlogForm = ({ updateNotification, hideForm }) => {
   const [newBlog, setNewBlog] = useState({
     title: "",
     author: "",
@@ -25,6 +25,7 @@ const CreateBlogForm = ({ updateNotification }) => {
                 status: null,
               });
             }, 5000);
+            hideForm.current.toggleVisibility();
           } catch (exception) {
             updateNotification({
               text: "Error creating blog",

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BlogLib from "./components/BlogLib.js";
 import CreateBlogForm from "./components/CreateBlogForm.js";
 import Login from "./components/Login.js";
 import LoginBanner from "./components/LoginBanner.js";
 import LogoutButton from "./components/LogoutButton.js";
 import Notification from "./components/Notification.js";
+import TogglableVis from "./components/utils/TogglableVis.js";
 import blogService from "./services/blogs";
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,7 +14,8 @@ const App = () => {
     text: null,
     status: null,
   });
-
+  // refs
+  const blogFormRef = useRef();
   // Get blogs on page load
   useEffect(() => {
     (async () => {
@@ -55,7 +57,12 @@ const App = () => {
           <LoginBanner user={user} />
           <LogoutButton setUserToken={setUser} />
           <BlogLib blogs={blogs} />
-          <CreateBlogForm updateNotification={setNotification} />
+          <TogglableVis buttonLabel="Create new blog" ref={blogFormRef}>
+            <CreateBlogForm
+              updateNotification={setNotification}
+              hideForm={blogFormRef}
+            />
+          </TogglableVis>
         </div>
       )}
     </div>

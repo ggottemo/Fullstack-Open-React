@@ -6,13 +6,16 @@ import Logger from "../logger.js";
 const requestLogger = (request, response, next) => {
   Logger.info("Method:", request.method);
   Logger.info("Path:  ", request.path);
-  Logger.info("Body:  ", request.body);
+  Logger.info(
+    "Body:  ",
+    request.body.containsPassword ? "********" : request.body
+  );
   Logger.info("---");
   next();
 };
 const passwordMasker = (request, response, next) => {
   if (request.body.password) {
-    request.body.password = "********";
+    request.body.containsPassword = true;
   }
   next();
 };
