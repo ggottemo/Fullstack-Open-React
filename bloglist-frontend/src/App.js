@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BlogLib from "./components/BlogLib.js";
+import CreateBlogForm from "./components/CreateBlogForm.js";
 import Login from "./components/Login.js";
 import LoginBanner from "./components/LoginBanner.js";
 import LogoutButton from "./components/LogoutButton.js";
@@ -10,7 +11,10 @@ const App = () => {
 
   // Get blogs on page load
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    (async () => {
+      const blogs = await blogService.getAll();
+      setBlogs(blogs);
+    })();
   }, []);
   // Check local storage for user token
   useEffect(() => {
@@ -25,9 +29,14 @@ const App = () => {
   return (
     <div>
       {user === null && <Login setUserToken={setUser} />}
-      {user !== null && <LoginBanner />}
-      {user !== null && <BlogLib blogs={blogs} />}
-      {user !== null && <LogoutButton setUserToken={setUser} />}
+      {user !== null && (
+        <div>
+          <LoginBanner user={user} />
+          <LogoutButton setUserToken={setUser} />
+          <BlogLib blogs={blogs} />
+          <CreateBlogForm />
+        </div>
+      )}
     </div>
   );
 };

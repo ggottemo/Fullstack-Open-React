@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Router } from "express";
+import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import { SECRET } from "../utils/config/config.js";
+import { SECRET, SECRET_EXPIRES_IN } from "../utils/config/config.js";
 
 const router = Router();
 
@@ -21,7 +21,9 @@ router.post("/api/login", async (request, response) => {
             username: user.username,
             id: user._id,
           };
-          const token = jwt.sign(userForToken, SECRET, { expiresIn: 60 * 60 });
+          const token = jwt.sign(userForToken, SECRET, {
+            expiresIn: SECRET_EXPIRES_IN,
+          });
           response
             .status(200)
             .send({ token, username: user.username, name: user.name });

@@ -18,10 +18,12 @@ if (!process.env.NODE_ENV === "test") {
 }
 
 app.use(MIDDLEWARE.requestLogger);
+app.use(MIDDLEWARE.tokenExtractor);
 // Routers
-app.use(blogRouter, MIDDLEWARE.tokenExtractor);
+app.use(blogRouter);
 app.use(userRouter);
 app.use(loginRouter);
+// Error Handling
 app.use(MIDDLEWARE.unknownEndpoint);
 app.use(MIDDLEWARE.errorHandler);
 export default app;

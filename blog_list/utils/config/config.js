@@ -8,5 +8,5 @@ const MONGO_URI =
     : process.env.MONGO_URI;
 
 export const SECRET = process.env.JWT_SECRET;
-
-export default { PORT, MONGO_URI, SECRET };
+export const SECRET_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
+export default { PORT, MONGO_URI, SECRET, SECRET_EXPIRES_IN };
