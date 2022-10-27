@@ -5,6 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch Chrome against localhost",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug Backend",
+      "type": "node",
+      "request": "launch",
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/blog_list/index.js",
+      "runtimeExecutable": "${workspaceFolder}/blog_list/node_modules/.bin/nodemon",
+      "envFile": "${workspaceFolder}/blog_list/.env"
+    },
+    {
       "name": "Debug Current Jest Tests",
       "type": "node",
       "request": "launch",
