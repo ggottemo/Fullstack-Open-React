@@ -1,7 +1,7 @@
-import Logger from "../logger.js";
 import jwt from "jsonwebtoken";
-import { SECRET } from "../config/config.js";
 import User from "../../models/user.js";
+import { SECRET } from "../config/config.js";
+import Logger from "../logger.js";
 
 const requestLogger = (request, response, next) => {
   Logger.info("Method:", request.method);
@@ -10,7 +10,13 @@ const requestLogger = (request, response, next) => {
   Logger.info("---");
   next();
 };
-
+const passwordMasker = (request, response, next) => {
+  if (request.body.password) {
+    request.body.password = "********";
+  }
+  next();
+};
+// Error handling middleware
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
@@ -58,4 +64,5 @@ export default {
   errorHandler,
   tokenExtractor,
   userExtractor,
+  passwordMasker,
 };

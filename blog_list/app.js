@@ -16,7 +16,7 @@ app.use(express.json());
 if (!process.env.NODE_ENV === "test") {
   app.use(morgan("tiny"));
 }
-
+app.use(MIDDLEWARE.passwordMasker);
 app.use(MIDDLEWARE.requestLogger);
 app.use(MIDDLEWARE.tokenExtractor);
 // Routers

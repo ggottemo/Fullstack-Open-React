@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import blogService from "../services/blogs";
 import loginService from "../services/login";
 
-const Login = ({ setUserToken }) => {
+const Login = ({ setUserToken, updateNotification }) => {
   // States
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +24,16 @@ const Login = ({ setUserToken }) => {
       setPassword("");
       blogService.setToken(user.token);
     } catch (exception) {
-      console.log("Wrong credentials");
+      updateNotification({
+        text: "Wrong username or password",
+        status: "e",
+      });
+      setTimeout(() => {
+        updateNotification({
+          text: null,
+          status: null,
+        });
+      }, 5000);
     }
   };
 

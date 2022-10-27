@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const CreateBlogForm = () => {
+const CreateBlogForm = ({ updateNotification }) => {
   const [newBlog, setNewBlog] = useState({
     title: "",
     author: "",
@@ -11,9 +11,32 @@ const CreateBlogForm = () => {
     <div>
       <h2>Create new</h2>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          blogService.create(newBlog);
+          try {
+            await blogService.create(newBlog);
+            updateNotification({
+              text: `A new blog ${newBlog.title} by ${newBlog.author} added`,
+              status: "s",
+            });
+            setTimeout(() => {
+              updateNotification({
+                text: null,
+                status: null,
+              });
+            }, 5000);
+          } catch (exception) {
+            updateNotification({
+              text: "Error creating blog",
+              status: "e",
+            });
+            setTimeout(() => {
+              updateNotification({
+                text: null,
+                status: null,
+              });
+            }, 5000);
+          }
         }}
       >
         <div>
