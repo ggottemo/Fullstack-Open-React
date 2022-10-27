@@ -1,12 +1,11 @@
-import React from "react";
+// login service
 
-const loginUser = async (credentials) => {
-  const response = await fetch("http://localhost:3001/api/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  });
-  return response.json();
+import axios from "axios";
+const baseUrl = "/api/login";
+
+const login = async (credentials) => {
+  const response = await axios.post(baseUrl, credentials);
+  return response.data;
 };
+
+export default login;

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import BlogLib from "./components/BlogLib";
-import Login from "./components/Login";
+import BlogLib from "./components/BlogLib.js";
+import Login from "./components/Login.js";
+import LoginBanner from "./components/LoginBanner.js";
 import blogService from "./services/blogs";
-
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
@@ -13,7 +13,8 @@ const App = () => {
 
   return (
     <div>
-      {user === null && <Login />}
+      {user === null && <Login setUserToken={setUser} />}
+      {user !== null && <LoginBanner />}
       {user !== null && <BlogLib blogs={blogs} />}
     </div>
   );

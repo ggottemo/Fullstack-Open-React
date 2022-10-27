@@ -1,9 +1,33 @@
 import React, { useState } from "react";
+import blogService from "../services/blogs";
+import loginService from "../services/login";
 
-const Login = ({ handleLogin }) => {
+const Login = ({ setUserToken }) => {
   // States
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  // Event handlers
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    console.log("Logging in with", username, password);
+    try {
+      const user = await loginService({
+        username,
+        password,
+      });
+      // Save the token to the browser's local storage
+      window.localStorage.setItem("loggedBloglistUser", JSON.stringify(user));
+
+      setUserToken(user);
+      setUsername("");
+      setPassword("");
+      blogService.setToken(user.token);
+    } catch (exception) {
+      console.log("Wrong credentials");
+    }
+  };
+
   return (
     <div className="login_wrapper">
       <h2>Log in to application</h2>
