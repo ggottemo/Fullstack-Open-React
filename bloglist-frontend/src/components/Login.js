@@ -5,7 +5,7 @@ const Login = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   return (
-    <div>
+    <div className="login_wrapper">
       <h2>Log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
@@ -13,7 +13,7 @@ const Login = ({ handleLogin }) => {
           <input
             value={username}
             reset={null}
-            onChange={(val) => setUsername(val)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
@@ -21,7 +21,7 @@ const Login = ({ handleLogin }) => {
           <input
             value={password}
             reset={null}
-            onChange={(val) => setPassword(val)}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <button type="submit">login</button>

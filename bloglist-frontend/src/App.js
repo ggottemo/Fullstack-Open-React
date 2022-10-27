@@ -1,24 +1,22 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+import { useEffect, useState } from "react";
+import BlogLib from "./components/BlogLib";
+import Login from "./components/Login";
+import blogService from "./services/blogs";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
+    blogService.getAll().then((blogs) => setBlogs(blogs));
+  }, []);
 
   return (
     <div>
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+      {user === null && <Login />}
+      {user !== null && <BlogLib blogs={blogs} />}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
