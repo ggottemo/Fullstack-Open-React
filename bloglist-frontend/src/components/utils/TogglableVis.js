@@ -26,4 +26,6 @@ const TogglableVis = forwardRef((props, refs) => {
   );
 });
 
+TogglableVis.displayName = "TogglableVis";
+
 export default TogglableVis;
