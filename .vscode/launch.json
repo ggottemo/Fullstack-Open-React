@@ -21,7 +21,10 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/blog_list/index.js",
       "runtimeExecutable": "${workspaceFolder}/blog_list/node_modules/.bin/nodemon",
-      "envFile": "${workspaceFolder}/blog_list/.env"
+      "envFile": "${workspaceFolder}/blog_list/.env",
+      "env": {
+        "NODE_ENV": "test"
+      }
     },
     {
       "name": "Debug Current Jest Tests",

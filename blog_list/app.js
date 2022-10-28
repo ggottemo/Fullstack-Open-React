@@ -5,6 +5,7 @@ import "express-async-errors";
 import morgan from "morgan";
 import blogRouter from "./controllers/blogController.js";
 import loginRouter from "./controllers/login.js";
+import testRouter from "./controllers/testController.js";
 import userRouter from "./controllers/userController.js";
 import MIDDLEWARE from "./utils/middleware/middleware.js";
 import MONGO from "./utils/mongo.js";
@@ -19,6 +20,11 @@ if (!process.env.NODE_ENV === "test") {
 app.use(MIDDLEWARE.passwordMasker);
 app.use(MIDDLEWARE.requestLogger);
 app.use(MIDDLEWARE.tokenExtractor);
+// For Testing
+if (process.env.NODE_ENV === "test") {
+  app.use(testRouter);
+}
+
 // Routers
 app.use(blogRouter);
 app.use(userRouter);

@@ -44,6 +44,7 @@ const Login = ({ setUserToken, updateNotification }) => {
         <div>
           username
           <input
+            id="username"
             value={username}
             reset={null}
             onChange={(e) => setUsername(e.target.value)}
@@ -52,12 +53,15 @@ const Login = ({ setUserToken, updateNotification }) => {
         <div>
           password
           <input
+            id="password"
             value={password}
             reset={null}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <button id="login-button" type="submit">
+          login
+        </button>
       </form>
     </div>
   );

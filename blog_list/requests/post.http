@@ -41,4 +41,7 @@ GET http://localhost:3001/api/users
 Content-Type: application/json
 ###
 
+### Test API
+POST http://localhost:3001/api/testing/reset
+Content-Type: application/json
 ###
