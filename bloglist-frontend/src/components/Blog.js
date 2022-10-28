@@ -20,10 +20,11 @@ const Blog = ({ blog }) => {
   const handleUpdate = async (event) => {
     event.preventDefault();
     const updatedBlog = {
+      user: window.localStorage.getItem("loggedBloglistUser").token,
       title: blog.title,
       author: blog.author,
       url: blog.url,
-      likes: blog.likes + 1,
+      likes: likes + 1,
     };
     const returnedBlog = await blogService.update(blog.id, updatedBlog);
     setLikes(returnedBlog.likes);
