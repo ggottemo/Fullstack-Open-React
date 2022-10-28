@@ -16,6 +16,7 @@ const App = () => {
   });
   // refs
   const blogFormRef = useRef();
+
   // Get blogs on page load
   useEffect(() => {
     (async () => {
