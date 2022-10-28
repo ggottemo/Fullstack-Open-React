@@ -43,6 +43,7 @@ const CreateBlogForm = ({ updateNotification, hideForm }) => {
         <div>
           title:
           <input
+            id="title"
             name="title"
             type="text"
             value={newBlog.title}
@@ -52,6 +53,7 @@ const CreateBlogForm = ({ updateNotification, hideForm }) => {
         <div>
           author:
           <input
+            id="author"
             name="author"
             type="text"
             value={newBlog.author}
@@ -61,13 +63,16 @@ const CreateBlogForm = ({ updateNotification, hideForm }) => {
         <div>
           url:
           <input
+            id="url"
             name="url"
             type="text"
             value={newBlog.url}
             onChange={(e) => setNewBlog({ ...newBlog, url: e.target.value })}
           />
         </div>
-        <button type="submit">create</button>
+        <button id="create-button" type="submit">
+          create
+        </button>
       </form>
     </div>
   );

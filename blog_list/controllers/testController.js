@@ -1,6 +1,7 @@
 // test api
 
 import { Router } from "express";
+import Blog from "../models/blogPost.js";
 import User from "../models/user.js";
 
 const router = Router();
@@ -22,6 +23,7 @@ router.post("/", async (req, res) => {
 // Reset
 router.post("/api/testing/reset", async (req, res) => {
   await User.deleteMany({});
+  await Blog.deleteMany({});
   res.status(204).end();
 });
 
