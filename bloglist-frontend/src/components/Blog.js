@@ -15,6 +15,13 @@ const Blog = ({ blog }) => {
   useEffect(() => {
     setLikes(blog.likes);
   }, [blog.likes]);
+  // Handle Delete
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.remove(blog.id);
+    }
+  };
 
   // Handle update
   const handleUpdate = async (event) => {
@@ -43,6 +50,7 @@ const Blog = ({ blog }) => {
         {blog.url} <br />
         likes {likes} <button onClick={handleUpdate}>like</button> <br />
         {blog.user.name} <br />
+        <button onClick={handleDelete}>remove</button>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import { Router } from "express";
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import Blog from "../models/blogPost.js";
 import User from "../models/user.js";
-import jwt from "jsonwebtoken";
 import { SECRET } from "../utils/config/config.js";
 
 const router = Router();
@@ -57,15 +57,19 @@ router.delete("/api/blogs/:id", async (request, response, next) => {
   if (!request.token || !decodedToken.id) {
     return response.status(401).json({ error: "token missing or invalid" });
   }
-  // Check user is the creator of the blog
-  if (request.user.id !== decodedToken.id) {
-    return response.status(401).json({ error: "unauthorized" });
+  const user = await User.findById(decodedToken.id);
+  if (!user) {
+    return response.status(401).json({ error: "user not found" });
   }
 
-  const blog = await Blog.findById(request.params.id);
-  if (blog === decodedToken.id.toString()) {
-    await Blog.findByIdAndRemove(request.params.id);
-    response.status(204).end();
+  const blog = (await Blog.findById(request.params.id)).toJSON();
+  if (blog.user[0]._id.toString() === decodedToken.id.toString()) {
+    try {
+      await Blog.findByIdAndRemove(request.params.id);
+      response.status(204).end();
+    } catch (error) {
+      next(error);
+    }
   } else {
     response.status(401).json({ error: "unauthorized" });
   }
