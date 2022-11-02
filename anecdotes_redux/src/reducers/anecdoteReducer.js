@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import anecdoteService from "../services/anecdote";
+
 const anecdotesAtStart = [
   "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
@@ -71,11 +72,11 @@ export const createNew = (content) => {
 };
 
 export const thunkVote = (id) => {
-  return async (dispatch, getState) => {
-    const target = getState().find((n) => n.id === id);
+  return async (dispatch) => {
+    const target = await anecdoteService.getOne(id);
     const updated = { ...target, votes: target.votes + 1 };
     await anecdoteService.vote(updated);
-    dispatch(vote(updated));
+    dispatch(vote(updated.id));
   };
 };
 

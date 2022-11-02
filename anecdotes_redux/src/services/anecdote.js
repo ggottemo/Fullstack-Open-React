@@ -22,4 +22,9 @@ const vote = async (anecdote) => {
   return response.data;
 };
 
-export default { getAll, create, vote };
+const getOne = async (id) => {
+  const response = await axios.get(`${baseURL}\\${id}`);
+  return response.data;
+};
+
+export default { getAll, create, vote, getOne };
