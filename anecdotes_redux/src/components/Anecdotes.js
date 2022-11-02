@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkVote } from "../reducers/anecdoteReducer";
-import { clearMessage, updateMessage } from "../reducers/notificationReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 const Anecdotes = () => {
   const anecdotes = useSelector((state) => state.anecdotes);
@@ -27,10 +27,9 @@ const Anecdotes = () => {
               <button
                 onClick={async () => {
                   dispatch(thunkVote(anecdote.id));
-                  dispatch(updateMessage("Voted for anecdote!"));
-                  setTimeout(() => {
-                    dispatch(clearMessage("Voted for anecdote!"));
-                  }, 3000);
+                  dispatch(
+                    setNotification(`You voted for ${anecdote.content}`, 3000)
+                  );
                 }}
               >
                 vote
