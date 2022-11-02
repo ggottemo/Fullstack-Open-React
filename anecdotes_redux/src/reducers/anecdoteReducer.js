@@ -12,10 +12,12 @@ const anecdotesAtStart = [
 const getId = () => (100000 * Math.random()).toFixed(0);
 
 const asObject = (anecdote) => {
+  const id = getId();
   return {
     content: anecdote,
-    id: getId(),
+    id,
     votes: 0,
+    user: id % 2 === 0 ? "First User" : "Second User",
   };
 };
 
@@ -27,10 +29,12 @@ const anecdoteSlice = createSlice({
   reducers: {
     create(state, action) {
       const content = action.payload;
+      const id = getId();
       state.push({
         content,
-        id: getId(),
+        id,
         votes: 0,
+        user: id % 2 === 0 ? "First User" : "Second User",
       });
     },
     vote(state, action) {
