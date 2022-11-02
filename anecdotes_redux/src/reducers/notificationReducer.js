@@ -14,7 +14,7 @@ const initialState = startingNotifications.map(asObject);
 
 const notificationSlice = createSlice({
   name: "notifications",
-  initialState,
+  initialState: [],
   reducers: {
     updateMessage(state, action) {
       state.push({
