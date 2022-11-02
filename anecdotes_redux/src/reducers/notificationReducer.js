@@ -23,7 +23,7 @@ const notificationSlice = createSlice({
       });
     },
     clearMessage(state, action) {
-      state.filter((x) => x !== action.payload);
+      return state.filter((x) => x.message !== action.payload);
     },
   },
 });

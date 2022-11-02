@@ -5,13 +5,8 @@ const Notification = ({ message }) => {
     borderWidth: 1,
   };
 
-  if (message.message.length > 0) {
-    return (
-      <div style={style} key={message.id}>
-        {" "}
-        {message.message}{" "}
-      </div>
-    );
+  if (message.length > 0) {
+    return <div style={style}> {message} </div>;
   } else return " ";
 };
 

@@ -1,11 +1,11 @@
 import Anecdotes from "./components/Anecdotes.js";
 import CreateAnecdote from "./components/CreateAnecdote.js";
-import Notification from "./components/Notification.js";
+import NotificationArea from "./components/NotificationArea.js";
 
 const App = () => {
   return (
     <div>
-      <Notification />
+      <NotificationArea />
       <Anecdotes />
       <CreateAnecdote />
     </div>
