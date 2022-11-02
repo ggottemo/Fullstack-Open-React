@@ -70,6 +70,15 @@ export const createNew = (content) => {
   };
 };
 
+export const thunkVote = (id) => {
+  return async (dispatch, getState) => {
+    const target = getState().find((n) => n.id === id);
+    const updated = { ...target, votes: target.votes + 1 };
+    await anecdoteService.vote(updated);
+    dispatch(vote(updated));
+  };
+};
+
 export const { create, vote, appendAnecdote, setAnecdotes } =
   anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
