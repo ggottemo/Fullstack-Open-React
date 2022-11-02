@@ -27,5 +27,6 @@ const notificationSlice = createSlice({
     },
   },
 });
+
 export const { updateMessage, clearMessage } = notificationSlice.actions;
 export default notificationSlice.reducer;

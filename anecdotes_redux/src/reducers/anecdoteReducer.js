@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import anecdoteService from "../services/anecdote";
 const anecdotesAtStart = [
   "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
@@ -53,6 +53,22 @@ const anecdoteSlice = createSlice({
     },
   },
 });
+// redux thunk
+export const initializeAnecdotes = () => {
+  // async fetch data
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll();
+    // dispatch different action
+    dispatch(setAnecdotes(anecdotes));
+  };
+};
+
+export const createNew = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.create(content);
+    dispatch(appendAnecdote(newAnecdote));
+  };
+};
 
 export const { create, vote, appendAnecdote, setAnecdotes } =
   anecdoteSlice.actions;
