@@ -1,18 +1,31 @@
-import { createSlice } from "redux/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-const startingNotifications = [
-  {
-    message: "Test notification 1",
-    id: (100000 * Math.random()).toFixed(0),
-  },
-];
+const getId = () => (100000 * Math.random()).toFixed(0);
+const startingNotifications = ["Test notification 1", "Test notification 2"];
 
-export const notificationSlice = createSlice({
+const asObject = (x) => {
+  return {
+    message: x,
+    id: getId(),
+  };
+};
+
+const initialState = startingNotifications.map(asObject);
+
+const notificationSlice = createSlice({
   name: "notifications",
-  startingNotifications,
+  initialState,
   reducers: {
-    sendVote(state, action) {},
+    updateMessage(state, action) {
+      state.push({
+        message: action.payload,
+        id: getId(),
+      });
+    },
+    clearMessage(state, action) {
+      state.filter((x) => x !== action.payload);
+    },
   },
 });
-
-export default notificationSlice.reducers();
+export const { updateMessage, clearMessage } = notificationSlice.actions;
+export default notificationSlice.reducer;

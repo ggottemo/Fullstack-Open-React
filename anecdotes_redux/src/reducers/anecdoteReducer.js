@@ -1,4 +1,4 @@
-import { createSlice } from "@redux/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const anecdotesAtStart = [
   "If it hurts, do it more often",
@@ -38,7 +38,7 @@ const anecdoteSlice = createSlice({
       const targetAnecdote = state.find((n) => n.id === id);
       const updatedAnecdote = {
         ...targetAnecdote,
-        likes: targetAnecdote.likes + 1,
+        votes: targetAnecdote.votes + 1,
       };
       return state.map((anecdote) =>
         anecdote.id === id ? updatedAnecdote : anecdote
