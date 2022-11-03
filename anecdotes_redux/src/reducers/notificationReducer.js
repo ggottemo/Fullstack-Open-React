@@ -25,17 +25,35 @@ const notificationSlice = createSlice({
     clearMessage(state, action) {
       return state.filter((x) => x.message !== action.payload);
     },
+    insertTimeout(state, action) {
+      return state.map((x, i) =>
+        i === state.length - 1 ? { ...state[i], timeout: action.payload } : x
+      );
+    },
+    cancelNotification(state, action) {
+      state.map((x) => clearTimeout(x.timeout));
+    },
   },
 });
 
 export const setNotification = (message, duration) => {
   return async (dispatch) => {
+    await dispatch(cancelNotification);
     dispatch(updateMessage(message));
-    setTimeout(() => {
-      dispatch(clearMessage(message));
-    }, duration);
+    dispatch(
+      insertTimeout(
+        setTimeout(() => {
+          dispatch(clearMessage(message));
+        }, duration)
+      )
+    );
   };
 };
 
-export const { updateMessage, clearMessage } = notificationSlice.actions;
+export const {
+  updateMessage,
+  clearMessage,
+  insertTimeout,
+  cancelNotification,
+} = notificationSlice.actions;
 export default notificationSlice.reducer;
