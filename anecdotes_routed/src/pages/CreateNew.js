@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CreateNew = ({ addNew }) => {
+const CreateNew = ({ addNew, notify }) => {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [info, setInfo] = useState("");
+
+  // hook to redirect back home after creation
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,6 +17,11 @@ const CreateNew = ({ addNew }) => {
       info,
       votes: 0,
     });
+    navigate("/");
+    notify(`Anecdote created: ${content}`);
+    setTimeout(() => {
+      notify("");
+    }, 5000);
   };
 
   return (

@@ -4,6 +4,7 @@ import About from "../pages/About.js";
 import AnecdoteList from "../pages/AnecdoteList.js";
 import CreateNew from "../pages/CreateNew.js";
 import Anecdote from "./Anecdote.js";
+import Notification from "./Notification.js";
 
 const Menu = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -22,6 +23,7 @@ const Menu = () => {
       id: 2,
     },
   ]);
+  const [notification, setNotification] = useState("");
   const padding = {
     paddingRight: 5,
   };
@@ -69,13 +71,17 @@ const Menu = () => {
           </NavLink>
         </li>
       </nav>
+      {notification.length > 0 && <Notification message={notification} />}
       <Routes>
         <Route
           path="/anecdotes/:id"
           element={<Anecdote anecdote={anecdote} />}
         />
         <Route path="/about" element={<About />} />
-        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+        <Route
+          path="/create"
+          element={<CreateNew notify={setNotification} addNew={addNew} />}
+        />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
       </Routes>
     </div>
