@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Route, Routes, useMatch } from "react-router-dom";
 import About from "../pages/About.js";
 import AnecdoteList from "../pages/AnecdoteList.js";
 import CreateNew from "../pages/CreateNew.js";
+import Anecdote from "./Anecdote.js";
 
 const Menu = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -43,6 +44,9 @@ const Menu = () => {
     setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
   };
 
+  // Check match for single route
+  const match = useMatch("/anecdotes/:id");
+  const anecdote = match ? anecdoteById(Number(match.params.id)) : null;
   return (
     <div>
       <nav>
@@ -53,7 +57,7 @@ const Menu = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="CreateNew" activeclassname="active">
+          <NavLink to="Create" activeclassname="active">
             {" "}
             Create New
           </NavLink>
@@ -66,6 +70,10 @@ const Menu = () => {
         </li>
       </nav>
       <Routes>
+        <Route
+          path="/anecdotes/:id"
+          element={<Anecdote anecdote={anecdote} />}
+        />
         <Route path="/about" element={<About />} />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
