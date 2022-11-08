@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import PromisePolyfill from 'promise-polyfill'
+
 const useAnecdotes = (url) => {
     const [anecdotes, setAnecdotes] = useState([])
 
@@ -16,6 +18,9 @@ const useAnecdotes = (url) => {
 
 }
 const App = () => {
+    if (!window.Promise) {
+        window.Promise = PromisePolyfill
+    }
     const [counter, setCounter] = useState(0)
     const [values, setValues] = useState([])
     const anecdotes = useAnecdotes(BACKEND_URL)
