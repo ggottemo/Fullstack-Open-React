@@ -11,10 +11,17 @@ export const useField = (type) => {
         setValue("");
     };
 
+    if (type === "button") {
+        return {
+            type,
+            onClick: reset,
+        };
+    }
+
     return {
         type,
         value,
         onChange,
-        reset,
+
     };
 }

@@ -29,6 +29,7 @@ const CreateNew = ({addNew, notify}) => {
     const contentHook = useField("text");
     const authorHook = useField("text");
     const infoHook = useField("text");
+    const buttonHook = useField("button");
 
     return (
         <div>
@@ -53,11 +54,7 @@ const CreateNew = ({addNew, notify}) => {
                     />
                 </div>
                 <button>create</button>
-                <button type={"button"} onClick={()=>{
-                    contentHook.reset();
-                    authorHook.reset();
-                    infoHook.reset();
-                }}>reset</button>
+                <button { ...buttonHook }>reset</button>
             </form>
         </div>
     );

@@ -78,3 +78,7 @@ a:active {
 h1 {
   font-family: consolas, monospace;
 }
+
+body {
+  overflow-x: hidden;
+}
