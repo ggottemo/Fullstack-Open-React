@@ -18,8 +18,7 @@ const useAnecdotes = (url) => {
 const App = () => {
     const [counter, setCounter] = useState(0)
     const [values, setValues] = useState([])
-    const url = 'http://localhost:3001/anecdotes'
-    const anecdotes = useAnecdotes(url)
+    const anecdotes = useAnecdotes(BACKEND_URL)
 
     const handleClick = () => {
         setCounter(counter + 1)

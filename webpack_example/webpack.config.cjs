@@ -1,6 +1,12 @@
 const path = require('path');
+const webpack = require('webpack');
 
-const config = {
+const config = (env, argv) => {
+    console.log('argv.mode', argv.mode);
+
+    const backend_url = argv.mode === 'development' ? 'http://localhost:3001/anecdotes' : 'https://fullstackopen.com';
+
+    return {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'build'),
@@ -27,11 +33,18 @@ const config = {
             }
         ]
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            BACKEND_URL: JSON.stringify(backend_url)
+        })
+    ],
     resolve: {
         extensions: ['.js', '.jsx']
     }
 
 
 }
+}
+
 
 module.exports = config;
