@@ -17,14 +17,7 @@ const config = {
                 test: /\.js$/,
                 loader: 'babel-loader',
                 options: {
-                    presets: [['@babel/preset-env', {
-                        useBuiltIns: 'usage',
-                        corejs: 3,
-                        targets: {
-                            "firefox": "64",
-                            "esmodules": true
-                        }
-                    }], '@babel/preset-react']
+                    presets: ['@babel/preset-env', '@babel/preset-react']
                 }
             },
             {
@@ -33,6 +26,9 @@ const config = {
             }
         ]
     },
+    resolve: {
+        extensions: ['.js', '.jsx']
+    }
 
 
 }
