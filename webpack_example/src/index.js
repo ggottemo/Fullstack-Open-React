@@ -1,7 +1,7 @@
-import App from './App'
+
+import App from './App.js'
 import React from 'react'
-import 'core-js/stable/index.js'
-import 'regnerator-runtime/runtime.js'
+import './index.css'
 import ReactDOM from 'react-dom'
 
 const hello = name => {
