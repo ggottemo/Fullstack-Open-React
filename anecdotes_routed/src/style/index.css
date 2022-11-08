@@ -1,0 +1,84 @@
+nav > li:nth-child(even) {
+  animation-name: inactive;
+  animation-duration: 5s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  transform-origin: center;
+}
+nav > li:nth-child(odd) {
+  animation-name: inactive;
+  animation-duration: 5s;
+  animation-direction: alternate-reverse;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  transform-origin: center;
+}
+.active {
+  color: red;
+  animation-name: active;
+  animation-duration: 4s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in;
+  transform-origin: center;
+
+  position: absolute;
+  left: -400px;
+}
+
+nav {
+  list-style-type: none;
+  display: flex;
+  font-weight: 700;
+  font: 1.25em fantasy;
+  margin-bottom: 2em;
+
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  width: 100%;
+}
+a:link {
+  text-decoration: none;
+}
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+a:active {
+  text-decoration: none;
+}
+
+@keyframes active {
+  from {
+    margin-left: 0;
+
+    color: red;
+    transform: rotateX(0deg) skewY(0deg);
+  }
+
+  to {
+    color: cyan;
+    margin-left: 100%;
+    transform: rotateX(800deg) skewY(82deg);
+  }
+}
+
+@keyframes inactive {
+  from {
+    transform: translateX(0px) rotateY(0deg);
+  }
+  to {
+    transform: translateX(100%) rotateY(10deg);
+  }
+}
+
+h1 {
+  font-family: consolas, monospace;
+}
+
+body {
+  overflow-x: hidden;
+}
