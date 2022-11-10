@@ -11,7 +11,9 @@ const TogglableVis = forwardRef((props, refs) => {
   };
 
   // Expose the toggleVisibility function to the parent component
-  useImperativeHandle(refs, () => toggleVisibility);
+  useImperativeHandle(refs, () => {
+    return toggleVisibility;
+  });
 
   return (
     <div>

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
+import { sendNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux";
 
-const CreateBlogForm = ({ updateNotification, hideForm }) => {
+const CreateBlogForm = () => {
   const [newBlog, setNewBlog] = useState({
     title: "",
     author: "",
     url: "",
   });
+
+  const dispatch = useDispatch();
   return (
     <div>
       <h2>Create new</h2>
@@ -15,28 +19,16 @@ const CreateBlogForm = ({ updateNotification, hideForm }) => {
           e.preventDefault();
           try {
             await blogService.create(newBlog);
-            updateNotification({
-              text: `A new blog ${newBlog.title} by ${newBlog.author} added`,
-              status: "s",
-            });
-            setTimeout(() => {
-              updateNotification({
-                text: null,
-                status: null,
-              });
-            }, 5000);
-            hideForm.current.toggleVisibility();
+            dispatch(
+              sendNotification(
+                `A new blog ${newBlog.title} by ${newBlog.author} added`,
+                "s"
+              )
+            );
+
+            // hideForm();
           } catch (exception) {
-            updateNotification({
-              text: "Error creating blog",
-              status: "e",
-            });
-            setTimeout(() => {
-              updateNotification({
-                text: null,
-                status: null,
-              });
-            }, 5000);
+            dispatch(sendNotification("Error creating blog", "e"));
           }
         }}
       >

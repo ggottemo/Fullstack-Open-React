@@ -36,7 +36,7 @@ router.post("/api/blogs", async (request, response, next) => {
     return response.status(401).json({ error: "user not found" });
   }
   if (!title || !url) {
-    response.status(400).send({ error: "title or url missing" });
+    return response.status(400).send({ error: "title or url missing" });
   }
   const blog = new Blog({
     title,

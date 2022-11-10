@@ -7,13 +7,16 @@ import LogoutButton from "./components/LogoutButton.js";
 import Notification from "./components/Notification.js";
 import TogglableVis from "./components/utils/TogglableVis.js";
 import blogService from "./services/blogs";
+
+import { set, clear } from "./reducers/notificationReducer";
+import { useDispatch, useSelector } from "react-redux";
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState({
-    text: null,
-    status: null,
-  });
+  // Redux
+  const notification = useSelector((state) => state.notification);
+  const dispatch = useDispatch();
   // refs
   const blogFormRef = useRef();
 
@@ -24,15 +27,9 @@ const App = () => {
         const blogs = await blogService.getAll();
         setBlogs(blogs);
       } catch (exception) {
-        setNotification({
-          text: "Error getting blogs",
-          status: "e",
-        });
+        dispatch(set(exception.text, "e"));
         setTimeout(() => {
-          setNotification({
-            text: null,
-            status: null,
-          });
+          dispatch(clear());
         }, 5000);
       }
     })();
@@ -47,11 +44,18 @@ const App = () => {
     }
   }, []);
 
+  const hideForm = () => {
+    blogFormRef.current.toggleVisibility();
+  };
+
   return (
     <div>
-      <Notification message={notification} />
+      <Notification
+        message={notification.message}
+        status={notification.status}
+      />
       {user === null && (
-        <Login setUserToken={setUser} updateNotification={setNotification} />
+        <Login setUserToken={setUser} updateNotification={set} />
       )}
       {user !== null && (
         <div>
@@ -59,10 +63,7 @@ const App = () => {
           <LogoutButton setUserToken={setUser} />
           <BlogLib blogs={blogs} />
           <TogglableVis buttonLabel="Create new blog" ref={blogFormRef}>
-            <CreateBlogForm
-              updateNotification={setNotification}
-              hideForm={blogFormRef}
-            />
+            <CreateBlogForm hideForm={hideForm} />
           </TogglableVis>
         </div>
       )}

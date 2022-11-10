@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 import loginService from "../services/login";
+import { useDispatch } from "react-redux";
+import { sendNotification } from "./../reducers/notificationReducer.js";
 
-const Login = ({ setUserToken, updateNotification }) => {
+const Login = ({ setUserToken }) => {
+  const dispatch = useDispatch();
   // States
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,16 +27,7 @@ const Login = ({ setUserToken, updateNotification }) => {
       setPassword("");
       blogService.setToken(user.token);
     } catch (exception) {
-      updateNotification({
-        text: "Wrong username or password",
-        status: "e",
-      });
-      setTimeout(() => {
-        updateNotification({
-          text: null,
-          status: null,
-        });
-      }, 5000);
+      dispatch(sendNotification("Wrong username or password", "e"));
     }
   };
 
