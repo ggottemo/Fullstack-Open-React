@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./reducers/rootReducer";
+import notificationReducer from "../reducers/notificationReducer";
 import logger from "redux-logger";
 
+const reducer = {
+  notification: notificationReducer,
+};
 const store = configureStore({
-  reducer: rootReducer,
+  reducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-  devTools: process.env.NODE_ENV !== "production",
 });
 
 export default store;
