@@ -91,12 +91,25 @@ let books = [
         genres: ['classic', 'revolution']
     },
 ]
-
+// Type definitions define the "shape" of your data
 const typeDefs = gql`
   type Query {
+    bookCount: Int!
+    authorCount: Int!
+    allBooks(author: String, genre: String): [Book!]!
+      allAuthors: [Author!]!
+  },
+    type Book {
+        title: String!
+        published: Int!
+    },
+  type Author {
+    name: String!
+    bookCount: Int!
   }
+    
 `
-
+// Resolvers define the technique for fetching the types in the schema.
 const resolvers = {
     Query: {
         bookCount: () => books.length,
@@ -113,7 +126,7 @@ const resolvers = {
         allAuthors: () => authors
     }
 }
-
+// The ApolloServer constructor
 const server = new ApolloServer({
     typeDefs,
     resolvers,
