@@ -1,5 +1,6 @@
 mutation  {
     editAuthor(name: "Robert Martin", setBornTo: 42) {
         name
+        born
     }
 }

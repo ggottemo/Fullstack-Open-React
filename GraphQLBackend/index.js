@@ -96,7 +96,7 @@ let books = [
 // Type definitions define the "shape" of your data
 const typeDefs = gql`
   type Query {
-    bookCount: Int!
+    bookCount: Int
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
       allAuthors: [Author!]!
@@ -109,7 +109,8 @@ const typeDefs = gql`
     },
   type Author {
     name: String!
-    bookCount: Int!
+      born: Int
+    bookCount: Query
   }
   type Mutation {
       addBook(
@@ -130,7 +131,18 @@ const typeDefs = gql`
 // Resolvers define the technique for fetching the types in the schema.
 const resolvers = {
     Query: {
-        bookCount: () => books.length,
+        bookCount: (
+            root,
+            args
+        ) => {
+            if (args.author) {
+                return books.filter(book => book.author === args.author).length
+            }
+            if (args.genre) {
+                return books.filter(book => book.genres.includes(args.genre)).length
+            }
+            return books.length
+        },
         authorCount: () => authors.length,
         allBooks: (root, args ) => {
             if (!args.author && !args.genre) {
@@ -145,7 +157,13 @@ const resolvers = {
           }
 
         },
-        allAuthors: () => authors
+        allAuthors: () => authors.map(author => {
+            return {
+                name: author.name,
+                born: author.born,
+                bookCount: books.filter(book => book.author === author.name).length
+            }
+        })
     },
     Mutation: {
         addBook: (root, args) => {
