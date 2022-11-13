@@ -1,7 +1,10 @@
+
+
 query {
-    allBooks(genre: "refactoring") {
+    allBooks {
         title
         author
+        published
+        genres
     }
 }
-

@@ -1,4 +1,6 @@
-const { ApolloServer, gql } = require('apollo-server')
+import {ApolloServer, gql} from 'apollo-server';
+
+import { v4 as uuidv4 } from 'uuid';
 
 let authors = [
     {
@@ -109,6 +111,16 @@ const typeDefs = gql`
     name: String!
     bookCount: Int!
   }
+  type Mutation {
+      addBook(
+          title: String!
+          author: String!
+          published: Int!
+            genres: [String!]!
+      ) : Book
+      
+  
+  }
     
 `
 // Resolvers define the technique for fetching the types in the schema.
@@ -130,6 +142,17 @@ const resolvers = {
 
         },
         allAuthors: () => authors
+    },
+    Mutation: {
+        addBook: (root, args) => {
+            if (!authors.find(author => author.name === args.name )) {
+                const author = { name: args.author, id: uuidv4() }
+            }
+            const book = { ...args, id: uuidv4() }
+            books = books.concat(book)
+            return book
+
+        }
     }
 }
 // The ApolloServer constructor
