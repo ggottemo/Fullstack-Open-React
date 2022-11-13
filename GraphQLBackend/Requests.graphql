@@ -1,10 +1,5 @@
-
-
-query {
-    allBooks {
-        title
-        author
-        published
-        genres
+mutation  {
+    editAuthor(name: "Robert Martin", setBornTo: 42) {
+        name
     }
 }
