@@ -110,7 +110,7 @@ const typeDefs = gql`
   type Author {
     name: String!
       born: Int
-    bookCount: Query
+    bookCount: Int!
   }
   type Mutation {
       addBook(
