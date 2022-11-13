@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/966f0141-e356-4f60-ade5-92e7c75164ce/resourceGroups/appsvc_linux_centralus_basic/subscriptions/966f0141-e356-4f60-ade5-92e7c75164ce/resourceGroups/appsvc_linux_centralus_basic/providers/Microsoft.Web/sites/reactPhoneBook",
+    "appService.deploySubpath": "exercise3.1"
+}
