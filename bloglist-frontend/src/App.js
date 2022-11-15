@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BlogLib from "./components/BlogLib.js";
 import CreateBlogForm from "./components/CreateBlogForm.js";
 import Login from "./components/Login.js";
@@ -8,13 +8,16 @@ import Notification from "./components/Notification.js";
 import TogglableVis from "./components/utils/TogglableVis.js";
 import blogService from "./services/blogs";
 
-import { set, clear } from "./reducers/notificationReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchBlogs } from "./reducers/blogReducer.js";
+import { clear, set } from "./reducers/notificationReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+  //const [blogs, setBlogs] = useState([]);
+
   // Redux
+  const blogs = useSelector((state) => state.blogs);
   const notification = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   // refs
@@ -24,8 +27,7 @@ const App = () => {
   useEffect(() => {
     (async () => {
       try {
-        const blogs = await blogService.getAll();
-        setBlogs(blogs);
+        dispatch(fetchBlogs());
       } catch (exception) {
         dispatch(set(exception.text, "e"));
         setTimeout(() => {
@@ -34,6 +36,7 @@ const App = () => {
       }
     })();
   }, []);
+
   // Check local storage for user token
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBloglistUser");
@@ -43,6 +46,7 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
+  // Rerender if  change
 
   const hideForm = () => {
     blogFormRef.current.toggleVisibility();
@@ -72,3 +76,4 @@ const App = () => {
 };
 
 export default App;
+

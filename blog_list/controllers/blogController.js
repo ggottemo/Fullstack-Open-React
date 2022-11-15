@@ -74,6 +74,14 @@ router.delete("/api/blogs/:id", async (request, response, next) => {
     response.status(401).json({ error: "unauthorized" });
   }
 });
+
+router.delete("/api/blogs", async (request, response, next) => {
+  try {
+    await Blog.deleteMany();
+  } catch (e) {
+    return response.status(401).json({ error: "Error deleting blogs" });
+  }
+});
 //////////////////////// PUT ////////////////////////
 // Add like to blog
 router.put("/api/blogs/:id", async (request, response, next) => {

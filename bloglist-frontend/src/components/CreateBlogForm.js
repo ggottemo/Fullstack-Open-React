@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import blogService from "../services/blogs";
-import { sendNotification } from "../reducers/notificationReducer";
 import { useDispatch } from "react-redux";
+import { createBlog } from "../reducers/blogReducer";
+import { sendNotification } from "../reducers/notificationReducer";
 
 const CreateBlogForm = () => {
   const [newBlog, setNewBlog] = useState({
@@ -18,7 +18,7 @@ const CreateBlogForm = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           try {
-            await blogService.create(newBlog);
+            dispatch(createBlog(newBlog));
             dispatch(
               sendNotification(
                 `A new blog ${newBlog.title} by ${newBlog.author} added`,
@@ -71,3 +71,4 @@ const CreateBlogForm = () => {
 };
 
 export default CreateBlogForm;
+
