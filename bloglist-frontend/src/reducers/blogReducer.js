@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogService from "../services/blogs";
+import { sendNotification } from "./notificationReducer";
 
 const blogReducer = createSlice({
   name: "blogs",
   initialState: [],
   reducers: {
     remove(state, action) {
-      return state.map((x) => (x !== action.payload ? x : ""));
+      return state.map((x) => (x.id !== action.payload ? x : ""));
     },
     addBlog(state, action) {
       return state.concat(action.payload);
@@ -21,8 +22,8 @@ const blogReducer = createSlice({
 export const createBlog = (blog) => {
   return async (dispatch) => {
     try {
-      await blogService.create(blog);
-      dispatch(addBlog(blog));
+      const newBlog = await blogService.create(blog);
+      dispatch(addBlog(newBlog));
     } catch (error) {
       console.log(error);
     }
@@ -42,6 +43,22 @@ export const fetchBlogs = () => {
   };
 };
 
+// Async remove blog
+export const removeBlog = (id) => {
+  return async (dispatch) => {
+    try {
+      const blog = await blogService.getOne(id);
+      if (blog) {
+        await blogService.remove(id);
+        dispatch(remove(id));
+        dispatch(sendNotification(`${blog.title} has been deleted`, "s"));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(sendNotification(e.message));
+    }
+  };
+};
+
 export const { remove, addBlog, setBlogs } = blogReducer.actions;
 export default blogReducer.reducer;
-

@@ -62,8 +62,8 @@ router.delete("/api/blogs/:id", async (request, response, next) => {
     return response.status(401).json({ error: "user not found" });
   }
 
-  const blog = (await Blog.findById(request.params.id)).toJSON();
-  if (blog.user[0]._id.toString() === decodedToken.id.toString()) {
+  const blog = await Blog.findById(request.params.id);
+  if (blog.user.toString() === decodedToken.id.toString()) {
     try {
       await Blog.findByIdAndRemove(request.params.id);
       response.status(204).end();
