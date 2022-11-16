@@ -49,7 +49,7 @@ const Blog = ({ blog }) => {
       <div style={showWhenVisible}>
         {blog.url} <br />
         likes {likes} <button onClick={handleUpdate}>like</button> <br />
-        {blog.user.name ?? "No Name Found"} <br />
+        {blog.user.name ?? blog.user.token ?? "No Name Found"} <br />
         <button onClick={handleDelete}>remove</button>
       </div>
     </div>

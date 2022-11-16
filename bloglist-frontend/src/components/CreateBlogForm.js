@@ -14,24 +14,7 @@ const CreateBlogForm = () => {
   return (
     <div>
       <h2>Create new</h2>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          try {
-            dispatch(createBlog(newBlog));
-            dispatch(
-              sendNotification(
-                `A new blog ${newBlog.title} by ${newBlog.author} added`,
-                "s"
-              )
-            );
-
-            // hideForm();
-          } catch (exception) {
-            dispatch(sendNotification("Error creating blog", "e"));
-          }
-        }}
-      >
+      <form>
         <div>
           title:
           <input
@@ -62,7 +45,35 @@ const CreateBlogForm = () => {
             onChange={(e) => setNewBlog({ ...newBlog, url: e.target.value })}
           />
         </div>
-        <button id="create-button" type="submit">
+        <button
+          id="create-button"
+          type="button"
+          onClick={async (e) => {
+            e.preventDefault();
+
+            try {
+              dispatch(
+                createBlog({
+                  ...newBlog,
+                  user: JSON.parse(
+                    window.localStorage.getItem("loggedBloglistUser")
+                  ),
+                })
+              );
+              dispatch(
+                sendNotification(
+                  `A new blog ${newBlog.title} by ${newBlog.author} added`,
+                  "s"
+                )
+              );
+
+              // hideForm();
+            } catch (exception) {
+              dispatch(sendNotification("Error creating blog", "e"));
+              console.error(e);
+            }
+          }}
+        >
           create
         </button>
       </form>
@@ -71,4 +82,3 @@ const CreateBlogForm = () => {
 };
 
 export default CreateBlogForm;
-
