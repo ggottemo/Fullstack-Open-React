@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { sendNotification } from "../reducers/notificationReducer";
 
@@ -9,7 +9,7 @@ const CreateBlogForm = () => {
     author: "",
     url: "",
   });
-
+  const curUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
   return (
     <div>
@@ -52,9 +52,6 @@ const CreateBlogForm = () => {
             e.preventDefault();
 
             try {
-              const curUser = JSON.parse(
-                window.localStorage.getItem("loggedBloglistUser")
-              );
               delete curUser.blogs;
               dispatch(
                 createBlog({

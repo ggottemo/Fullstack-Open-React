@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import BlogLib from "./components/BlogLib.js";
 import CreateBlogForm from "./components/CreateBlogForm.js";
 import Login from "./components/Login.js";
@@ -10,15 +10,14 @@ import blogService from "./services/blogs";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "./reducers/blogReducer.js";
-import { clear, set } from "./reducers/notificationReducer";
+import { sendNotification } from "./reducers/notificationReducer";
+import userActions from "./reducers/userReducer";
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  //const [blogs, setBlogs] = useState([]);
-
   // Redux
   const blogs = useSelector((state) => state.blogs);
   const notification = useSelector((state) => state.notification);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   // refs
   const blogFormRef = useRef();
@@ -29,20 +28,17 @@ const App = () => {
       try {
         dispatch(fetchBlogs());
       } catch (exception) {
-        dispatch(set(exception.text, "e"));
-        setTimeout(() => {
-          dispatch(clear());
-        }, 5000);
+        dispatch(sendNotification(exception.response.data.error, "e"));
       }
     })();
   }, []);
 
   // Check local storage for user token
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBloglistUser");
+    const loggedUserJSON = null;
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      userActions.set(user.token);
       blogService.setToken(user.token);
     }
   }, []);
@@ -58,13 +54,11 @@ const App = () => {
         message={notification.message}
         status={notification.status}
       />
-      {user === null && (
-        <Login setUserToken={setUser} updateNotification={set} />
-      )}
+      {(user === null || user === "") && <Login />}
       {user !== null && (
         <div>
           <LoginBanner user={user} />
-          <LogoutButton setUserToken={setUser} />
+          <LogoutButton />
           <BlogLib blogs={blogs} />
           <TogglableVis buttonLabel="Create new blog" ref={blogFormRef}>
             <CreateBlogForm hideForm={hideForm} />
@@ -76,4 +70,3 @@ const App = () => {
 };
 
 export default App;
-

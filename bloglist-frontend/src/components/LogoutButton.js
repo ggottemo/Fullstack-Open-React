@@ -1,5 +1,8 @@
 import React from "react";
 
+import { clear } from "../reducers/userReducer";
+import { useDispatch } from "react-redux";
+
 // Style
 const LogoutButtonStyle = {
   backgroundColor: "red",
@@ -13,10 +16,10 @@ const LogoutButtonStyle = {
   margin: "10px",
 };
 
-const LogoutButton = ({ setUserToken }) => {
+const LogoutButton = () => {
+  const dispatch = useDispatch();
   const handleLogout = () => {
-    window.localStorage.removeItem("loggedBloglistUser");
-    setUserToken(null);
+    dispatch(clear());
   };
 
   return (
