@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "./reducers/blogReducer.js";
 import { sendNotification } from "./reducers/notificationReducer";
 import userActions from "./reducers/userReducer";
+import UserLib from "./components/UserLib";
 
 const App = () => {
   // Redux
@@ -21,6 +22,7 @@ const App = () => {
   const dispatch = useDispatch();
   // refs
   const blogFormRef = useRef();
+  const userViewRef = useRef();
 
   // Get blogs on page load
   useEffect(() => {
@@ -59,6 +61,9 @@ const App = () => {
         <div>
           <LoginBanner user={user} />
           <LogoutButton />
+          <TogglableVis buttonLabel="User View" ref={userViewRef}>
+            <UserLib />
+          </TogglableVis>
           <BlogLib blogs={blogs} />
           <TogglableVis buttonLabel="Create new blog" ref={blogFormRef}>
             <CreateBlogForm hideForm={hideForm} />
