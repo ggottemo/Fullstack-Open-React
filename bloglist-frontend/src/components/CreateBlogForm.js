@@ -52,12 +52,14 @@ const CreateBlogForm = () => {
             e.preventDefault();
 
             try {
+              const curUser = JSON.parse(
+                window.localStorage.getItem("loggedBloglistUser")
+              );
+              delete curUser.blogs;
               dispatch(
                 createBlog({
                   ...newBlog,
-                  user: JSON.parse(
-                    window.localStorage.getItem("loggedBloglistUser")
-                  ),
+                  user: curUser,
                 })
               );
               dispatch(

@@ -22,8 +22,9 @@ const blogReducer = createSlice({
 export const createBlog = (blog) => {
   return async (dispatch) => {
     try {
-      const newBlog = await blogService.create(blog);
-      dispatch(addBlog(newBlog));
+      const addedBlog = await blogService.create(blog);
+      delete addedBlog.user.blogs;
+      dispatch(addBlog(addedBlog));
     } catch (error) {
       console.log(error);
     }

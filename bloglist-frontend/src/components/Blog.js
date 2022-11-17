@@ -35,8 +35,12 @@ const Blog = ({ blog }) => {
   // Handle update
   const handleUpdate = async (event) => {
     event.preventDefault();
+    const curUser = JSON.stringify(
+      window.localStorage.getItem("loggedBloglistUser")
+    );
+    delete curUser.blogs;
     const updatedBlog = {
-      user: JSON.parse(window.localStorage.getItem("loggedBloglistUser")).token,
+      user: curUser,
       title: blog.title,
       author: blog.author,
       url: blog.url,
@@ -57,8 +61,7 @@ const Blog = ({ blog }) => {
       <div style={showWhenVisible}>
         {blog.url} <br />
         likes {likes} <button onClick={handleUpdate}>like</button> <br />
-        {blog.user.name ?? blog.user.token ?? blog.user ?? "No Name Found"}{" "}
-        <br />
+        {"blog.user.name" ?? "No Name Found"} <br />
         <button onClick={handleDelete}>remove</button>
       </div>
     </div>
