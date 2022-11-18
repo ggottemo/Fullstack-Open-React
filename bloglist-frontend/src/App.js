@@ -13,6 +13,7 @@ import { fetchBlogs } from "./reducers/blogReducer.js";
 import { sendNotification } from "./reducers/notificationReducer";
 import userActions from "./reducers/userReducer";
 import UserLib from "./components/UserLib";
+import LoggedInUserView from "./components/LoggedInUserView";
 
 const App = () => {
   // Redux
@@ -61,6 +62,7 @@ const App = () => {
         <div>
           <LoginBanner user={user} />
           <LogoutButton />
+          <LoggedInUserView />
           <TogglableVis buttonLabel="User View" ref={userViewRef}>
             <UserLib />
           </TogglableVis>
