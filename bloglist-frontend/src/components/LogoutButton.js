@@ -2,6 +2,7 @@ import React from "react";
 
 import { clear } from "../reducers/userReducer";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // Style
 const LogoutButtonStyle = {
@@ -17,9 +18,13 @@ const LogoutButtonStyle = {
 };
 
 const LogoutButton = () => {
+  // React Router
+  const nav = useNavigate();
+  // Redux
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(clear());
+    nav("/");
   };
 
   return (

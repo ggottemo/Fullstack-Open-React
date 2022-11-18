@@ -23,7 +23,7 @@ const Login = () => {
           password,
         })
       );
-      nav("dashboard");
+      nav("/dashboard");
       setUsername("");
       setPassword("");
     } catch (exception) {

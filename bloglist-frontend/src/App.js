@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import BlogLib from "./components/BlogLib.js";
 import CreateBlogForm from "./components/CreateBlogForm.js";
-import Login from "./components/Login.js";
+
 import LoginBanner from "./components/LoginBanner.js";
 import LogoutButton from "./components/LogoutButton.js";
 import Notification from "./components/Notification.js";
@@ -57,7 +57,6 @@ const App = () => {
         message={notification.message}
         status={notification.status}
       />
-      {(user === null || user === "") && <Login />}
       {user !== null && user !== "" && (
         <div>
           <LoginBanner user={user} />
