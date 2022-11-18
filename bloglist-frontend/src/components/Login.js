@@ -3,8 +3,11 @@ import { loginUser } from "../reducers/userReducer";
 import { useDispatch } from "react-redux";
 import { sendNotification } from "./../reducers/notificationReducer.js";
 
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const dispatch = useDispatch();
+  const nav = useNavigate();
   // States
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +23,7 @@ const Login = () => {
           password,
         })
       );
-
+      nav("dashboard");
       setUsername("");
       setPassword("");
     } catch (exception) {

@@ -7,7 +7,7 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`;
   axios.defaults.headers.common["Authorization"] = token;
 };
-// GET /api/blogs
+// GET /api/blogs/:id
 
 const getOne = async (id) => {
   const response = await axios.get(`${baseUrl}/${id}`);
