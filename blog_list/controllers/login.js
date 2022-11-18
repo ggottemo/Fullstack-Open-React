@@ -25,14 +25,12 @@ router.post("/api/login", async (request, response) => {
           const token = jwt.sign(userForToken, SECRET, {
             expiresIn: SECRET_EXPIRES_IN,
           });
-          response
-            .status(200)
-            .send({
-              token,
-              username: user.username,
-              name: user.name,
-              blogs: user.blogs,
-            });
+          response.status(200).send({
+            token,
+            username: user.username,
+            name: user.name,
+            blogs: user.blogs,
+          });
         } else {
           response.status(401).send({ error: "invalid password" });
         }

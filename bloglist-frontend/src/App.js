@@ -57,7 +57,7 @@ const App = () => {
         status={notification.status}
       />
       {(user === null || user === "") && <Login />}
-      {user !== null && (
+      {user !== null && user !== "" && (
         <div>
           <LoginBanner user={user} />
           <LogoutButton />
