@@ -1,5 +1,8 @@
 // Resolvers define the technique for fetching the types in the schema.
 import {v4 as uuidv4} from "uuid";
+import Author from "../models/author.js";
+import Book from "../models/book.js";
+import InitialData from "../data/initial.js";
 
 export const resolvers = {
     Query: {
@@ -38,25 +41,58 @@ export const resolvers = {
         })
     },
     Mutation: {
-        addBook: (root, args) => {
-            if (!authors.find(author => author.name === args.name )) {
-                const author = { name: args.author, id: uuidv4() }
+        addBook: async  (root, args) => {
+
+            const author = await Author
+                .findOne({name: args.author})
+                .catch(err => console.log(err))
+            if (!author) {
+                const newAuthor = new Author({
+                    name: args.author,
+                    born: null,
+                    bookCount: 1
+                })
             }
-            const book = { ...args, id: uuidv4() }
-            books = books.concat(book)
-            return book
+            const book = new Book({
+                title: args.title,
+                published: args.published,
+                author: author._id,
+                genres: args.genres
+            })
+
 
         },
-        editAuthor: (root, args) => {
-            console.log(` editAuthor: ${args.name} ${args.setBornTo}`)
-            const author = authors.find( author => author.name === args.name)
+        editAuthor: async (root, args) => {
+          const author = await Author
+              .findOne({name: args.name})
+                .catch(err => console.log(err))
             if (!author) {
                 return null
             }
-            const updatedAuthor = { ...author, born: args.setBornTo }
-            authors = authors.map(author => author.name === args.name ? updatedAuthor : author)
-            return updatedAuthor
+            author.born = args.setBornTo
+            await author.save()
+            return author
 
+        },
+        initDataBase: async (root, args) => {
+            // Delete all authors and books
+            await Author.deleteMany({})
+            await Book.deleteMany({})
+            // Add authors and books
+            const authors = InitialData.authors
+            const books = InitialData.books
+            for (const {name, born} of authors) {
+                const newAuthor = new Author({
+                    name,
+                    born,
+                    bookCount: 0
+                })
+                await newAuthor.save()
+            }
         }
+
+
     }
 }
+
+

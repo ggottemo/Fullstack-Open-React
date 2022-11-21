@@ -10,6 +10,7 @@ const authors = InitialData.authors
 const books = InitialData.books
 
 
+
 // The ApolloServer constructor
 const server = new ApolloServer({
     typeDefs,
@@ -18,6 +19,11 @@ const server = new ApolloServer({
 })
 
 server.listen().then(({ url }) => {
-    ConfigMongo();
-    console.log(`Server ready at ${url}`)
+    ConfigMongo().then(r => console.log(r))
+    console.log(`🚀  Server ready at ${url}`)
+
+
+
+
+    console.log(`Server ready at ${url}` )
 })

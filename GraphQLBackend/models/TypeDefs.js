@@ -30,6 +30,11 @@ const typeDefs = () => gql`
             name: String!
             setBornTo: Int!
         ) : Author
+        initDataBase(
+            authors: [String]!
+            books: [String!]!
+        ) : Boolean
+        
 
 
     }
