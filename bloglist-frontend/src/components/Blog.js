@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import blogService from "../services/blogs";
+import { removeBlog } from "../reducers/blogReducer";
+import { useDispatch } from "react-redux";
+
 const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
+
+  const dispatch = useDispatch();
 
   const blogStyle = {
     paddingTop: 10,
@@ -18,16 +23,24 @@ const Blog = ({ blog }) => {
   // Handle Delete
   const handleDelete = async (event) => {
     event.preventDefault();
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(blog.id);
+    try {
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+        await dispatch(removeBlog(blog.id));
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
   // Handle update
   const handleUpdate = async (event) => {
     event.preventDefault();
+    const curUser = JSON.stringify(
+      window.localStorage.getItem("loggedBloglistUser")
+    );
+    delete curUser.blogs;
     const updatedBlog = {
-      user: window.localStorage.getItem("loggedBloglistUser").token,
+      user: curUser,
       title: blog.title,
       author: blog.author,
       url: blog.url,
@@ -35,7 +48,6 @@ const Blog = ({ blog }) => {
     };
     const returnedBlog = await blogService.update(blog.id, updatedBlog);
     setLikes(returnedBlog.likes);
-    console.log(returnedBlog);
   };
 
   const showWhenVisible = { display: visible ? "" : "none" };
@@ -49,7 +61,7 @@ const Blog = ({ blog }) => {
       <div style={showWhenVisible}>
         {blog.url} <br />
         likes {likes} <button onClick={handleUpdate}>like</button> <br />
-        {blog.user.name} <br />
+        {"blog.user.name" ?? "No Name Found"} <br />
         <button onClick={handleDelete}>remove</button>
       </div>
     </div>

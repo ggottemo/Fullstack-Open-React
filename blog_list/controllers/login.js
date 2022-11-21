@@ -11,6 +11,7 @@ router.post("/api/login", async (request, response) => {
   const { username, password } = request.body;
   await User.findOne({ username }).exec((err, user) => {
     if (err) throw err;
+    user.populate("blogs");
     if (!user) {
       response.status(401).send({ error: "invalid username" });
     } else {
@@ -24,9 +25,12 @@ router.post("/api/login", async (request, response) => {
           const token = jwt.sign(userForToken, SECRET, {
             expiresIn: SECRET_EXPIRES_IN,
           });
-          response
-            .status(200)
-            .send({ token, username: user.username, name: user.name });
+          response.status(200).send({
+            token,
+            username: user.username,
+            name: user.name,
+            blogs: user.blogs,
+          });
         } else {
           response.status(401).send({ error: "invalid password" });
         }

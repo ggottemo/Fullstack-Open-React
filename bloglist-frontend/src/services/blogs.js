@@ -7,7 +7,12 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`;
   axios.defaults.headers.common["Authorization"] = token;
 };
+// GET /api/blogs/:id
 
+const getOne = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
+  return response.data;
+};
 const getAll = async () => {
   const request = axios.get(baseUrl);
   const response = await request;
@@ -44,6 +49,7 @@ const remove = async (id) => {
 // Export
 const blogService = {
   getAll,
+  getOne,
   create,
   setToken,
   update,

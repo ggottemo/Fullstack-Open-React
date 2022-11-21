@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import blogService from "../services/blogs";
-import loginService from "../services/login";
+import { loginUser } from "../reducers/userReducer";
+import { useDispatch } from "react-redux";
+import { sendNotification } from "./../reducers/notificationReducer.js";
 
-const Login = ({ setUserToken, updateNotification }) => {
+import { useNavigate } from "react-router-dom";
+
+const Login = () => {
+  const dispatch = useDispatch();
+  const nav = useNavigate();
   // States
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -12,28 +17,17 @@ const Login = ({ setUserToken, updateNotification }) => {
     event.preventDefault();
     console.log("Logging in with", username, password);
     try {
-      const user = await loginService({
-        username,
-        password,
-      });
-      // Save the token to the browser's local storage
-      window.localStorage.setItem("loggedBloglistUser", JSON.stringify(user));
-
-      setUserToken(user);
+      await dispatch(
+        loginUser({
+          username,
+          password,
+        })
+      );
+      nav("/dashboard");
       setUsername("");
       setPassword("");
-      blogService.setToken(user.token);
     } catch (exception) {
-      updateNotification({
-        text: "Wrong username or password",
-        status: "e",
-      });
-      setTimeout(() => {
-        updateNotification({
-          text: null,
-          status: null,
-        });
-      }, 5000);
+      dispatch(sendNotification("Wrong username or password", "e"));
     }
   };
 

@@ -1,18 +1,20 @@
 import React from "react";
+
 // Notification component - for displaying error and success messages
 // Props:
 // message: { text: string, status: string }
 // text: message to display
 // status: "s" for success, "e" for error
-const Notification = ({ message }) => {
-  if (message.text === null) {
+const Notification = ({ message, status }) => {
+  if (message === "" || status === "") {
+    return null;
+  }
+  if (message === null || status === null) {
     return null;
   }
 
   return (
-    <div style={message.status === "s" ? successStyle : errorStyle}>
-      {message.text}
-    </div>
+    <div style={status === "s" ? successStyle : errorStyle}>{message}</div>
   );
 };
 

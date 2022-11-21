@@ -1,45 +1,20 @@
 import React, { useState } from "react";
-import blogService from "../services/blogs";
+import { useDispatch, useSelector } from "react-redux";
+import { createBlog } from "../reducers/blogReducer";
+import { sendNotification } from "../reducers/notificationReducer";
 
-const CreateBlogForm = ({ updateNotification, hideForm }) => {
+const CreateBlogForm = () => {
   const [newBlog, setNewBlog] = useState({
     title: "",
     author: "",
     url: "",
   });
+  const curUser = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   return (
     <div>
       <h2>Create new</h2>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          try {
-            await blogService.create(newBlog);
-            updateNotification({
-              text: `A new blog ${newBlog.title} by ${newBlog.author} added`,
-              status: "s",
-            });
-            setTimeout(() => {
-              updateNotification({
-                text: null,
-                status: null,
-              });
-            }, 5000);
-            hideForm.current.toggleVisibility();
-          } catch (exception) {
-            updateNotification({
-              text: "Error creating blog",
-              status: "e",
-            });
-            setTimeout(() => {
-              updateNotification({
-                text: null,
-                status: null,
-              });
-            }, 5000);
-          }
-        }}
-      >
+      <form>
         <div>
           title:
           <input
@@ -70,7 +45,34 @@ const CreateBlogForm = ({ updateNotification, hideForm }) => {
             onChange={(e) => setNewBlog({ ...newBlog, url: e.target.value })}
           />
         </div>
-        <button id="create-button" type="submit">
+        <button
+          id="create-button"
+          type="button"
+          onClick={async (e) => {
+            e.preventDefault();
+
+            try {
+              delete curUser.blogs;
+              dispatch(
+                createBlog({
+                  ...newBlog,
+                  user: curUser,
+                })
+              );
+              dispatch(
+                sendNotification(
+                  `A new blog ${newBlog.title} by ${newBlog.author} added`,
+                  "s"
+                )
+              );
+
+              // hideForm();
+            } catch (exception) {
+              dispatch(sendNotification("Error creating blog", "e"));
+              console.error(e);
+            }
+          }}
+        >
           create
         </button>
       </form>

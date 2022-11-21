@@ -36,7 +36,7 @@ router.post("/api/blogs", async (request, response, next) => {
     return response.status(401).json({ error: "user not found" });
   }
   if (!title || !url) {
-    response.status(400).send({ error: "title or url missing" });
+    return response.status(400).send({ error: "title or url missing" });
   }
   const blog = new Blog({
     title,
@@ -62,8 +62,8 @@ router.delete("/api/blogs/:id", async (request, response, next) => {
     return response.status(401).json({ error: "user not found" });
   }
 
-  const blog = (await Blog.findById(request.params.id)).toJSON();
-  if (blog.user[0]._id.toString() === decodedToken.id.toString()) {
+  const blog = await Blog.findById(request.params.id);
+  if (blog.user.toString() === decodedToken.id.toString()) {
     try {
       await Blog.findByIdAndRemove(request.params.id);
       response.status(204).end();
@@ -72,6 +72,14 @@ router.delete("/api/blogs/:id", async (request, response, next) => {
     }
   } else {
     response.status(401).json({ error: "unauthorized" });
+  }
+});
+
+router.delete("/api/blogs", async (request, response, next) => {
+  try {
+    await Blog.deleteMany();
+  } catch (e) {
+    return response.status(401).json({ error: "Error deleting blogs" });
   }
 });
 //////////////////////// PUT ////////////////////////

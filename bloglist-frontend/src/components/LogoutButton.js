@@ -1,5 +1,9 @@
 import React from "react";
 
+import { clear } from "../reducers/userReducer";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 // Style
 const LogoutButtonStyle = {
   backgroundColor: "red",
@@ -13,10 +17,14 @@ const LogoutButtonStyle = {
   margin: "10px",
 };
 
-const LogoutButton = ({ setUserToken }) => {
+const LogoutButton = () => {
+  // React Router
+  const nav = useNavigate();
+  // Redux
+  const dispatch = useDispatch();
   const handleLogout = () => {
-    window.localStorage.removeItem("loggedBloglistUser");
-    setUserToken(null);
+    dispatch(clear());
+    nav("/");
   };
 
   return (
