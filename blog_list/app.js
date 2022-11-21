@@ -21,7 +21,7 @@ app.use(MIDDLEWARE.passwordMasker);
 app.use(MIDDLEWARE.requestLogger);
 app.use(MIDDLEWARE.tokenExtractor);
 // For Testing
-if (process.env.NODE_ENV === "test") {
+if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
   app.use(testRouter);
 }
 
